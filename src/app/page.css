@@ -1,0 +1,5 @@
+.span-wrap {
+    width: 200px;
+    overflow-wrap: break-word;
+    white-space: normal;
+}

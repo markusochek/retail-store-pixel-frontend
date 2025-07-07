@@ -1,18 +1,13 @@
 import React from 'react';
 
-const ProductBlock = () => {
+const ProductBlock = ({ id, name, salePrice }: {id: number, name: string, salePrice: number}) => {
     return (
         <>
-            <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{display: "flex", flexDirection: "column", whiteSpace: "pre-line"}}>
                 <img height={"100px"} width={"100px"} src="37522b69_4c36_11f0_84a5_0cc47adeeeb3_2465ba59_4cce_11f0_84a5_0cc47adeeeb3.webp" alt="error loaded"/>
-                <span>
-                {
-                    `Код: 10212557
-                    Каталка №0373 "Поезд" с ручкой/пакет/20*11*14
-                    Зарегистрируйтесь, если Вы покупаете товар оптом
-                    Розничная цена`
-                }
-              </span>
+                <span>Код: {id}</span>
+                <span>{name}</span>
+                <span>Розничная цена {salePrice}₽</span>
             </div>
         </>
     );

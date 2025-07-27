@@ -8,8 +8,8 @@ export class ProductEntity {
     })
     id?: number;
 
-    @Column({ unique: true })
-    id_from_another_db?: number;
+    @Column('int8', { name: "id_from_another_db", unique: true })
+    idFromAnotherDb?: number;
 
     @Column('varchar', { length: 255 })
     name!: string;

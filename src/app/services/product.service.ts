@@ -14,7 +14,7 @@ export class ProductService {
     }
 
     async create(productData: ProductEntity) {
-        const isCreated = await this.productRepository.existsBy({ id_from_another_db: productData.id_from_another_db });
+        const isCreated = await this.productRepository.existsBy({ idFromAnotherDb: productData.idFromAnotherDb });
         if (!isCreated) {
             const product = this.productRepository.create(productData);
             return this.productRepository.save(product);

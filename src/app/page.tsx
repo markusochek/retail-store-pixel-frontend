@@ -28,7 +28,7 @@ function parseProductsFile(filename: fs.PathOrFileDescriptor) {
 
             try {
                 products.push({
-                    id_from_another_db: +parts[0],
+                    idFromAnotherDb: +parts[0],
                     name: parts[1],
                     unitOfMeasurement: parts[2],
                     salePrice: parseFloat(parts[3].replace(/\s/g, '').replace(',', '.')),

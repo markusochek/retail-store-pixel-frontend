@@ -22,7 +22,7 @@ const ProductContainer = async () => {
                     <ProductBlock
                         key={product.id}
                         id={product.id}
-                        id_from_another_db={product.id_from_another_db}
+                        idFromAnotherDb={product.idFromAnotherDb}
                         name={product.name}
                         salePrice={product.salePrice}
                         path_to_image={getImagePath("37522b69_4c36_11f0_84a5_0cc47adeeeb3_2465ba59_4cce_11f0_84a5_0cc47adeeeb3.webp")}

@@ -1,0 +1,5 @@
+POSTGRES_USER=user_for_database
+POSTGRES_PASSWORD=password_for_database
+POSTGRES_DB=db_name
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432

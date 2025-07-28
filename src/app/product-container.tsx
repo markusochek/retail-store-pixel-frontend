@@ -10,24 +10,26 @@ const ProductContainer = async () => {
 
     return (
         <>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-                flexGrow: 5,
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-                gap: '2%',
-            }}>
-                {products.map((product) => (
-                    <ProductBlock
-                        key={product.id}
-                        id={product.id}
-                        idFromAnotherDb={product.idFromAnotherDb}
-                        name={product.name}
-                        salePrice={product.salePrice}
-                        pathToImage={getImagePath(product.pathToImage)}
-                    />
-                ))}
+            <div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexGrow: 5,
+                    flexWrap: 'wrap',
+                    justifyContent: 'flex-start',
+                    gap: '2%',
+                }}>
+                    {products.map((product) => (
+                        <ProductBlock
+                            key={product.id}
+                            id={product.id}
+                            idFromAnotherDb={product.idFromAnotherDb}
+                            name={product.name}
+                            salePrice={product.salePrice}
+                            pathToImage={getImagePath(product.pathToImage)}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     );

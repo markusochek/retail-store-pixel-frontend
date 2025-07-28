@@ -2,6 +2,7 @@ import Filter from "@/app/filter";
 import ProductContainer from "@/app/product-container";
 import {diContainer} from "@/app/lib/di/di-container";
 import fs from "node:fs";
+import {getImagePath} from "@/app/lib/helpers/images";
 
 function parseProductsFile(filename: fs.PathOrFileDescriptor) {
     try {
@@ -61,14 +62,24 @@ export default async function Home() {
         for (let productFromFile of productsFromFile) {
             await productService.create(productFromFile);
         }
-    }, 1000);
+    }, 100000);
 
     return (
-        <>
-            <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <Filter></Filter>
-                <ProductContainer></ProductContainer>
+    <>
+        <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+            <div style={{display: "flex", flexDirection: "column", marginLeft: "10%", marginRight: "10%"}}>
+                <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+                    <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center", marginRight: "5%" }}>
+                        <img src={getImagePath("yumminky-pc-43-1024.webp")} alt={"пользователь"} style={{height: "50%", width: "50%"}}/>
+                        <div style={{}}>ВОЙТИ</div>
+                    </div>
+                </div>
+                <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <Filter></Filter>
+                    <ProductContainer></ProductContainer>
+                </div>
             </div>
-        </>
+        </div>
+    </>
     );
 }

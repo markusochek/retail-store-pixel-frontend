@@ -1,5 +1,6 @@
 import {ProductEntity} from "@/app/entities/product.entity";
 import {DataSource} from "typeorm";
+import {UserEntity} from "@/app/entities/user.entity";
 
 let connection: DataSource;
 
@@ -15,7 +16,7 @@ export async function getDatabaseConnection(): Promise<DataSource> {
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
-        entities: [ProductEntity],
+        entities: [ProductEntity, UserEntity],
         synchronize: false,
         logging: false,
     });

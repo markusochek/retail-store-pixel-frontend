@@ -1,5 +1,6 @@
 import {ProductService} from "@/app/services/product.service";
 import {getDatabaseConnection} from "@/app/lib/db/connect-db";
+import {UserService} from "@/app/services/user.service";
 
 class DIContainer {
     private static instance: DIContainer;
@@ -21,6 +22,15 @@ class DIContainer {
             this.services.set("productService", service);
         }
         return this.services.get("productService");
+    }
+
+    async getUserService(): Promise<UserService> {
+        if (!this.services.has("userService")) {
+            const connection = await getDatabaseConnection();
+            const service = new UserService(connection);
+            this.services.set("userService", service);
+        }
+        return this.services.get("userService");
     }
 }
 

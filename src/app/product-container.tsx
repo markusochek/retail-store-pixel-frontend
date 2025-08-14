@@ -2,11 +2,11 @@ import React from 'react';
 import ProductBlock from "@/app/product-block";
 
 import {getImagePath} from "@/app/lib/helpers/images";
-import {diContainer} from "@/app/lib/di/di-container";
-import {ProductEntity} from "@/app/entities/product.entity";
+import {prisma} from "@/app/lib/db/connect-db";
 
 const ProductContainer = async () => {
-    const products = await getProducts();
+    const products = await prisma.products.findMany();
+    products.sort((a, b) => Number(a.id_from_another_db - b.id_from_another_db));
 
     return (
         <div style={{
@@ -16,26 +16,18 @@ const ProductContainer = async () => {
             justifyContent: 'flex-start',
             gap: '2%',
         }}>
-            {products.map((product: ProductEntity) => (
+            {products.map((product) => (
                 <ProductBlock
                     key={product.id}
                     id={product.id}
-                    idFromAnotherDb={product.idFromAnotherDb}
+                    idFromAnotherDb={product.id_from_another_db}
                     name={product.name}
-                    salePrice={product.salePrice}
-                    pathToImage={getImagePath(product.pathToImage)}
+                    salePrice={product.sale_price.toNumber()}
+                    pathToImage={getImagePath(product.path_to_image)}
                 />
             ))}
         </div>
     );
 };
-
-async function getProducts() {
-    const productService = await diContainer.getProductService();
-    const products: ProductEntity[] = await productService.findAll();
-    products.sort((a, b) => a.idFromAnotherDb - b.idFromAnotherDb);
-
-    return products;
-}
 
 export default ProductContainer;

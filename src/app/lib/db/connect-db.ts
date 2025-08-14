@@ -1,32 +1,9 @@
-import {ProductEntity} from "@/app/entities/product.entity";
-import {DataSource} from "typeorm";
-import {UserEntity} from "@/app/entities/user.entity";
+import { PrismaClient } from '@prisma/client'
 
-let connection: DataSource;
-
-export async function getDatabaseConnection(): Promise<DataSource> {
-    if (connection?.isInitialized) {
-        return connection;
-    }
-
-    connection = new DataSource({
-        type: "postgres",
-        host: process.env.POSTGRES_HOST,
-        port: parseInt(process.env.POSTGRES_PORT || "5432"),
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-        entities: [ProductEntity, UserEntity],
-        synchronize: false,
-        logging: false,
-    });
-
-    try {
-        await connection.initialize();
-        console.log("Database connection established");
-        return connection;
-    } catch (error) {
-        console.error("Database connection failed", error);
-        throw error;
-    }
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined
 }
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma

@@ -1,8 +1,8 @@
 import Filter from "@/app/filter";
 import ProductContainer from "@/app/product-container";
-import {diContainer} from "@/app/lib/di/di-container";
 import fs from "node:fs";
 import Header from "@/app/Header";
+import {prisma} from "@/app/lib/db/connect-db";
 
 function parseProductsFile(filename: fs.PathOrFileDescriptor) {
     try {
@@ -29,10 +29,10 @@ function parseProductsFile(filename: fs.PathOrFileDescriptor) {
 
             try {
                 products.push({
-                    idFromAnotherDb: +parts[0],
+                    id_from_another_db: +parts[0],
                     name: parts[1],
-                    unitOfMeasurement: parts[2],
-                    salePrice: parseFloat(parts[3].replace(/\s/g, '').replace(',', '.')),
+                    unit_of_measurement: parts[2],
+                    sale_price: parseFloat(parts[3].replace(/\s/g, '').replace(',', '.')),
                     quantity: parseFloat(parts[4].replace(',', '.'))
                 });
             } catch (e: any) {
@@ -48,19 +48,16 @@ function parseProductsFile(filename: fs.PathOrFileDescriptor) {
 }
 
 export default async function Home() {
-    const productService = await diContainer.getProductService();
-
-    const productsFromFile = parseProductsFile('products');
-    for (let productFromFile of productsFromFile) {
-        await productService.create(productFromFile);
-    }
-
     const intervalRequestProductsFile = setInterval(async () => {
-        const productService = await diContainer.getProductService();
-
         const productsFromFile = parseProductsFile('products');
-        for (let productFromFile of productsFromFile) {
-            await productService.create(productFromFile);
+        for (const productFromFile of productsFromFile) {
+            const existingProduct = await prisma.products.findUnique({
+                where: { id_from_another_db: productFromFile.id_from_another_db }
+            });
+
+            if (!existingProduct) {
+                await prisma.products.create({ data: productFromFile });
+            }
         }
     }, 100000);
 

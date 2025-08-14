@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import {diContainer} from "@/app/lib/di/di-container";
 import bcrypt from "bcrypt";
+import {prisma} from "@/app/lib/db/connect-db";
 
 export async function POST(request: { json: () => PromiseLike<{ email: any; password: any; }> | { email: any; password: any; }; }) {
     const { email, password } = await request.json();
 
-    const userService = await diContainer.getUserService();
-
     try {
-        const user = await userService.findByEmail(email);
+        const user = await prisma.users.findUnique({where: {email}});
 
         if (!user) {
             return NextResponse.json(

@@ -1,9 +1,10 @@
 'use client'
 
 import React, {useRef, useState} from 'react';
-import Image from "next/image";
+import Image, {StaticImageData} from "next/image";
+import { Decimal } from '@prisma/client/runtime/library';
 
-const ProductBlock = ({ id, idFromAnotherDb, name, salePrice, pathToImage }: {id: number, idFromAnotherDb: number, name: string, salePrice: number, pathToImage: string}) => {
+const ProductBlock = ({ id, idFromAnotherDb, name, salePrice, pathToImage }: {id: bigint, idFromAnotherDb: bigint, name: string, salePrice: number, pathToImage: StaticImageData | string}) => {
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 

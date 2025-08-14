@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { existsSync, mkdirSync } from "fs";
-import {diContainer} from "@/app/lib/di/di-container";
+import {prisma} from "@/app/lib/db/connect-db";
 
 export async function POST(request: Request) {
     const formData = await request.formData();
@@ -25,8 +25,10 @@ export async function POST(request: Request) {
     try {
         await writeFile(filePath, buffer);
 
-        const productService = await diContainer.getProductService();
-        const updateResult = await productService.updatePathToImage(Number(productId), filename);
+        const updateResult = await prisma.products.update({
+            where: {id: Number(productId)},
+            data: {path_to_image: filename}
+        });
         if (updateResult != null) {
             return NextResponse.json({ url: `/uploads/images/${filename}` });
         }

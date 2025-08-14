@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import {diContainer} from "@/app/lib/di/di-container";
 import bcrypt from 'bcrypt';
+import {prisma} from "@/app/lib/db/connect-db";
 
 export async function POST(request: Request) {
-    const userService = await diContainer.getUserService();
-
     try {
         const { email, password } = await request.json();
 
-        const isUserCreated = await userService.existsByEmail(email);
+        const isUserCreated = await prisma.users.findUnique({where: {email}});
 
         if (isUserCreated) {
             return NextResponse.json(
@@ -19,10 +17,10 @@ export async function POST(request: Request) {
 
         const hashedPassword = await bcrypt.hash(password, 16);
 
-        await userService.create({
+        await prisma.users.create({data: {
             email,
-            password: hashedPassword,
-        });
+            password: new TextEncoder().encode(hashedPassword),
+        }});
 
         return NextResponse.json({ success: true });
     } catch (error) {

@@ -1,5 +1,10 @@
+import thereIsNoPicture from "@/../public/icons/there-is-no-picture.png"
+
 export const getImagePath = (imageName: string) => {
     const extensions = ['.jpg', '.jpeg', '.png', '.webp'];
-    const hasExtension = extensions.some(ext => imageName.endsWith(ext));
-    return `/images/${hasExtension ? imageName : `${imageName}.jpg`}`;
+    if (imageName !== null) {
+        const hasExtension = extensions.some(ext => imageName.endsWith(ext));
+        return `/uploads/images/${hasExtension ? imageName : `${imageName}.jpg`}`;
+    }
+    return thereIsNoPicture;
 };

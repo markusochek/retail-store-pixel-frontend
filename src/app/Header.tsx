@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { getIconPath } from "@/app/lib/helpers/icons";
 import AuthModal from "./AuthModal";
+import pictureOfAManOnAuthorization from "@/../public/icons/picture-of-a-man-on-authorization.png";
+import Image from "next/image";
 
 const Header = () => {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -13,9 +14,9 @@ const Header = () => {
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={() => setIsAuthModalOpen(true)}
             >
-                <img
-                    src={getIconPath("yumminky-pc-43-1024.webp")}
-                    alt=""
+                <Image
+                    src={pictureOfAManOnAuthorization}
+                    alt={""}
                     width={24}
                     height={24}
                 />

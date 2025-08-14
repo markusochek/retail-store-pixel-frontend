@@ -1,5 +1,5 @@
 
-import {DataSource, Repository} from 'typeorm';
+import {DataSource, Repository, UpdateResult} from 'typeorm';
 import {ProductEntity} from '../entities/product.entity';
 
 export class ProductService {
@@ -20,5 +20,9 @@ export class ProductService {
             return this.productRepository.save(product);
         }
         return new ProductEntity();
+    }
+
+    updatePathToImage(productIdFromAnotherDb: number, fileName: string): Promise<UpdateResult> {
+        return this.productRepository.update(productIdFromAnotherDb, {pathToImage: fileName});
     }
 }

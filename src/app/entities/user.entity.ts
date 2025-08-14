@@ -13,4 +13,7 @@ export class UserEntity {
 
     @Column('varchar', { length: 128 })
     password!: string;
+
+    @Column('boolean', { name: "is_admin"})
+    isAdmin?: boolean;
 }

@@ -78,7 +78,7 @@ export default async function Home() {
                     flexDirection: "row",
                     alignItems: "center"
                 }}>
-                    <Filter></Filter>
+                    {/*<Filter></Filter>*/}
                     <ProductContainer></ProductContainer>
                 </div>
             </div>

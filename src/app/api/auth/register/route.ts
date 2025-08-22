@@ -1,32 +1,68 @@
-import { NextResponse } from "next/server";
-import bcrypt from 'bcrypt';
-import {prisma} from "@/app/lib/db/connect-db";
+import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import {prisma} from "@/app/lib/db/prisma";
+import {generateAccessToken, generateRefreshToken} from "@/app/lib/jwt";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
         const { email, password } = await request.json();
 
-        const isUserCreated = await prisma.users.findUnique({where: {email}});
-
-        if (isUserCreated) {
+        if (!email || !password) {
             return NextResponse.json(
-                { success: false, message: "Пользователь уже существует" },
+                { error: 'Email and password are required' },
                 { status: 400 }
             );
         }
 
-        const hashedPassword = await bcrypt.hash(password, 16);
+        const existingUser = await prisma.users.findUnique({
+            where: { email },
+        });
 
-        await prisma.users.create({data: {
-            email,
-            password: new TextEncoder().encode(hashedPassword),
-        }});
+        if (existingUser) {
+            return NextResponse.json(
+                { error: 'User already exists' },
+                { status: 409 }
+            );
+        }
 
-        return NextResponse.json({ success: true });
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const user = await prisma.users.create({
+            data: {
+                email,
+                password: new TextEncoder().encode(hashedPassword),
+            },
+        });
+
+        const accessToken = generateAccessToken({ userId: Number(user.id), email: user.email, roleId: Number(user.role_id) });
+        const refreshToken = generateRefreshToken({ userId: Number(user.id), email: user.email, roleId: Number(user.role_id) });
+
+        await prisma.users.update({
+            where: { id: user.id },
+            data: { refresh_token: refreshToken },
+        });
+
+        const response = NextResponse.json(
+            {
+                user: { id: user.id.toString(), email: user.email },
+                accessToken
+            },
+            { status: 201 }
+        );
+
+        response.cookies.set('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60,
+        });
+
+        return response;
+
     } catch (error) {
-        console.log(error)
+        console.error('Registration error:', error);
         return NextResponse.json(
-            { success: false, message: "Ошибка сервера" },
+            { error: 'Internal server error' },
             { status: 500 }
         );
     }

@@ -2,9 +2,14 @@
 
 import React, {useRef, useState} from 'react';
 import Image, {StaticImageData} from "next/image";
-import { Decimal } from '@prisma/client/runtime/library';
 
-const ProductBlock = ({ id, idFromAnotherDb, name, salePrice, pathToImage }: {id: bigint, idFromAnotherDb: bigint, name: string, salePrice: number, pathToImage: StaticImageData | string}) => {
+const ProductBlock = ({id, idFromAnotherDb, name, salePrice, pathToImage}: {
+    id: bigint,
+    idFromAnotherDb: bigint,
+    name: string,
+    salePrice: number,
+    pathToImage: StaticImageData | string,
+}) => {
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,7 +50,7 @@ const ProductBlock = ({ id, idFromAnotherDb, name, salePrice, pathToImage }: {id
 
     return (
         <div style={{display: "flex", flexDirection: "column", whiteSpace: "pre-line", width: "18%" }}>
-            <div onClick={handleDivClick} style={{display: "flex", justifyContent: "center", alignItems: "center", border: "2px dashed #000000", cursor: "pointer"}} className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
+            <div onClick={isAdmin ? handleDivClick : undefined} style={{display: "flex", justifyContent: "center", alignItems: "center", border: "2px dashed #000000", cursor: "pointer"}} className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image
                     src={uploadedImageUrl || pathToImage}
                     alt={"error loaded"}

@@ -2,7 +2,7 @@ import React from 'react';
 import ProductBlock from "@/app/product-block";
 
 import {getImagePath} from "@/app/lib/helpers/images";
-import {prisma} from "@/app/lib/db/connect-db";
+import {prisma} from "@/app/lib/db/prisma";
 
 const ProductContainer = async () => {
     const products = await prisma.products.findMany();

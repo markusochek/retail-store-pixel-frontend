@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { existsSync, mkdirSync } from "fs";
-import {prisma} from "@/app/lib/db/connect-db";
+import {prisma} from "@/app/lib/db/prisma";
 
 export async function POST(request: Request) {
     const formData = await request.formData();

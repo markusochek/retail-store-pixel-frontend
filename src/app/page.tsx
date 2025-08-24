@@ -22,31 +22,10 @@ export default async function Home() {
   }, 100000);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        backgroundColor: '#F5F7FA',
-      }}
-    >
-      <div
-        style={{ display: 'flex', flexDirection: 'column', marginLeft: '10%', marginRight: '10%' }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Header isEntrance={!!session} />
-        </div>
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <ProductContainer></ProductContainer>
-        </div>
+    <div className={'flex flex-row flex-wrap justify-center bg-gray-100'}>
+      <div className={'flex flex-col mx-[10%] gap-[0.5%]'}>
+        <Header isEntrance={!!session} />
+        <ProductContainer></ProductContainer>
       </div>
     </div>
   );

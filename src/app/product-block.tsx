@@ -57,53 +57,25 @@ const ProductBlock = ({
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        whiteSpace: 'pre-line',
-        width: '18%',
-      }}
-    >
+    <div className={'flex flex-col whitespace-pre-line w-[18%]'}>
       <div
+        className={
+          'flex justify-center items-center border-2 border-dashed border-black cursor-pointer relative aspect-[3/4] overflow-hidden rounded-4xl bg-gray-100'
+        }
         onClick={isAdmin ? handleDivClick : undefined}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          border: '2px dashed #000000',
-          cursor: 'pointer',
-        }}
-        className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100"
       >
         <Image
+          className="object-cover"
           src={uploadedImageUrl || pathToImage}
           alt={'error loaded'}
           fill
-          className="object-cover"
         />
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept="image/*"
-          style={{ display: 'none' }}
-        />
+        <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" />
       </div>
-      <span style={{}}>Код: {idFromAnotherDb}</span>
-      <span
-        style={{
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {name}
-      </span>
-      <span style={{}}>Розничная цена</span>
-      <span style={{}}>{salePrice}₽</span>
+      <span>Код: {idFromAnotherDb}</span>
+      <span className={'line-clamp-2 overflow-hidden text-ellipsis'}>{name}</span>
+      <span>Розничная цена</span>
+      <span>{salePrice}₽</span>
     </div>
   );
 };

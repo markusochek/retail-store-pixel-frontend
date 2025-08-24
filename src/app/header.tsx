@@ -22,7 +22,10 @@ const Header = ({ isEntrance }: { isEntrance: boolean }) => {
   };
 
   return (
-    <header className="flex justify-end items-center p-4 gap-4">
+    <header
+      className="w-[100%] h-[100%] flex justify-end items-center rounded-4xl p-4 gap-4"
+      style={{ backgroundColor: '#FFFFFF' }}
+    >
       {isEntrance ? (
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">

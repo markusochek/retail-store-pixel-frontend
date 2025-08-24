@@ -13,13 +13,9 @@ const ProductContainer = async () => {
   const session = await getServerSession(authOptions);
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        gap: '2%',
-      }}
+      className={
+        'flex flex-row flex-wrap justify-center align-center bg-white rounded-4xl gap-[2%] p-[2%]'
+      }
     >
       {products.map(product => (
         <ProductBlock

@@ -22,7 +22,14 @@ export default async function Home() {
   }, 100000);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: '#F5F7FA',
+      }}
+    >
       <div
         style={{ display: 'flex', flexDirection: 'column', marginLeft: '10%', marginRight: '10%' }}
       >

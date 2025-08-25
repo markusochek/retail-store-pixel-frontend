@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import axios from 'axios';
 
 type FormData = {
   email: string;
@@ -31,7 +32,6 @@ const AuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
     setError('');
 
     try {
-      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
       if (mode === 'login') {
         try {
           const result = await signIn('credentials', {
@@ -50,21 +50,23 @@ const AuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
         } catch (error) {
           setError('Произошла ошибка при входе');
         }
-      }
+      } else {
+        const response = await axios.post('/api/auth/register', data);
 
-      // if (response.status === 200 || response.status === 201) {
-      //     if (response.data.accessToken) {
-      //         localStorage.setItem('accessToken', response.data.accessToken);
-      //     }
-      //
-      //     if (response.data.user) {
-      //         localStorage.setItem('user', JSON.stringify(response.data.user));
-      //     }
-      //
-      //     router.refresh();
-      //     onClose();
-      //     reset();
-      // }
+        if (response.status === 200 || response.status === 201) {
+          if (response.data.accessToken) {
+            localStorage.setItem('accessToken', response.data.accessToken);
+          }
+
+          if (response.data.user) {
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          }
+
+          router.refresh();
+          onClose();
+          reset();
+        }
+      }
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.error || err.response?.data?.message || 'Произошла ошибка';

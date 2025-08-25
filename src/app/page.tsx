@@ -8,18 +8,25 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const intervalRequestProductsFile = setInterval(async () => {
-    const productsFromFile = parseProductsFile('products');
-    for (const productFromFile of productsFromFile) {
-      const existingProduct = await prisma.products.findUnique({
-        where: { id_from_another_db: productFromFile.id_from_another_db },
+  const syncProducts = setInterval(async () => {
+    const products = parseProductsFile('products');
+
+    for (const product of products) {
+      const exists = await prisma.products.findUnique({
+        where: { id_from_another_db: product.id_from_another_db },
       });
 
-      if (!existingProduct) {
-        await prisma.products.create({ data: productFromFile });
+      if (!exists) {
+        await prisma.products.create({
+          data: {
+            sale_price: product.sale_price,
+            name: product.name,
+            id_from_another_db: product.id_from_another_db,
+          },
+        });
       }
     }
-  }, 100000);
+  }, 1000);
 
   return (
     <div className={'flex flex-row flex-wrap justify-center bg-gray-100'}>

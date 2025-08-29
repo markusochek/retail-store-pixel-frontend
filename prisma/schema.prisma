@@ -19,15 +19,22 @@ model users {
 }
 
 model products {
-  sale_price         Decimal @db.Decimal
-  path_to_image      String? @db.VarChar(255)
-  name               String  @db.VarChar(255)
-  id                 BigInt  @id(map: "products_pk") @default(autoincrement())
-  id_from_another_db BigInt  @unique(map: "products_unique_id_from_another_db")
+  sale_price         Decimal  @db.Decimal
+  name               String   @db.VarChar(255)
+  id                 BigInt   @id(map: "products_pk") @default(autoincrement())
+  id_from_another_db BigInt   @unique(map: "products_unique_id_from_another_db")
+  images             images[]
 }
 
 model roles {
   id    BigInt  @id(map: "roles_pk") @default(autoincrement())
   name  String  @db.VarChar(63)
   users users[]
+}
+
+model images {
+  id            BigInt   @id(map: "images_pk") @default(autoincrement())
+  path_to_image String   @db.VarChar(255)
+  product_id    BigInt
+  products      products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "images_products_fk")
 }

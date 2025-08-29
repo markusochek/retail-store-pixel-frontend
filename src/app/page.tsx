@@ -26,7 +26,7 @@ export default async function Home() {
         });
       }
     }
-  }, 1000);
+  }, 100000);
 
   return (
     <div className={'flex flex-row flex-wrap justify-center bg-gray-100'}>

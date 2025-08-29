@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import ProductImageSliderEmbla from '@/app/components/ProductImageSliderEmbla';
+import ProductImageHoverArea from '@/app/components/ProductImageHoverArea';
 
 const ProductBlock = ({
   id,
@@ -78,7 +78,7 @@ const ProductBlock = ({
       }
     >
       <div className={'cursor-pointer'} onMouseDown={isAdmin ? handleMouseDown : undefined}>
-        <ProductImageSliderEmbla images={displayedImages} />
+        <ProductImageHoverArea images={displayedImages} />
         <input
           hidden={true}
           type="file"

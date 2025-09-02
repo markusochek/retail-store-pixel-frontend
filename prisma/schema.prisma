@@ -19,11 +19,14 @@ model users {
 }
 
 model products {
-  sale_price         Decimal  @db.Decimal
-  name               String   @db.VarChar(255)
-  id                 BigInt   @id(map: "products_pk") @default(autoincrement())
-  id_from_another_db BigInt   @unique(map: "products_unique_id_from_another_db")
+  sale_price         Decimal    @db.Decimal
+  name               String     @db.VarChar(255)
+  id                 BigInt     @id(map: "products_pk") @default(autoincrement())
+  id_from_another_db BigInt     @unique(map: "products_unique_id_from_another_db")
+  description        String?
+  category_id        BigInt     @default(1)
   images             images[]
+  categories         categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_categories_fk")
 }
 
 model roles {
@@ -37,4 +40,10 @@ model images {
   path_to_image String   @db.VarChar(255)
   product_id    BigInt
   products      products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "images_products_fk")
+}
+
+model categories {
+  id       BigInt     @id(map: "categories_pk") @default(autoincrement())
+  name     String     @unique(map: "categories_unique_name") @db.VarChar(255)
+  products products[]
 }

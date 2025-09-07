@@ -3,6 +3,7 @@ import { unlink, writeFile } from 'fs/promises';
 import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { prisma } from '@/app/lib/db/prisma';
+import { syncProductsToMeilisearch } from '@/app/lib/sync-products';
 
 export async function POST(request: Request) {
   let transaction;
@@ -68,6 +69,8 @@ export async function POST(request: Request) {
             productId: newImage.product_id.toString(),
           });
         }
+
+        await syncProductsToMeilisearch();
 
         return {
           newImages,

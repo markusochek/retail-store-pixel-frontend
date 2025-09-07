@@ -4,9 +4,13 @@ import { prisma } from '@/app/lib/db/prisma';
 import { parseProductsFile } from '@/app/lib/helpers/parse-products-files';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { configureMeilisearch, syncProductsToMeilisearch } from '@/app/lib/sync-products';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+
+  await syncProductsToMeilisearch();
+  await configureMeilisearch();
 
   const syncProducts = setInterval(async () => {
     const products = parseProductsFile('products');

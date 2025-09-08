@@ -1,74 +1,6 @@
 import { prisma } from './db/prisma';
 import { meilisearchAdminClient, productsIndexAdmin } from './meilisearch';
 
-function detectCategory(name: string): string {
-  const lowerName = name.toLowerCase();
-
-  if (
-    lowerName.includes('железная дорога') ||
-    lowerName.includes('поезд') ||
-    lowerName.includes('train')
-  ) {
-    return 'Железные дороги';
-  }
-  if (lowerName.includes('кукла') || lowerName.includes('doll') || lowerName.includes('барби')) {
-    return 'Куклы';
-  }
-  if (
-    lowerName.includes('мягкая игрушка') ||
-    lowerName.includes('плюш') ||
-    lowerName.includes('игрушка')
-  ) {
-    return 'Мягкие игрушки';
-  }
-  if (
-    lowerName.includes('робот') ||
-    lowerName.includes('трансформер') ||
-    lowerName.includes('robot')
-  ) {
-    return 'Роботы и трансформеры';
-  }
-  if (
-    lowerName.includes('пистолет') ||
-    lowerName.includes('бластер') ||
-    lowerName.includes('gun')
-  ) {
-    return 'Оружие и бластеры';
-  }
-  if (
-    lowerName.includes('мяч') ||
-    lowerName.includes('ball') ||
-    lowerName.includes('футбольный') ||
-    lowerName.includes('баскетбольный')
-  ) {
-    return 'Мячи';
-  }
-  if (lowerName.includes('набор') || lowerName.includes('set') || lowerName.includes('комплект')) {
-    if (lowerName.includes('космети') || lowerName.includes('makeup')) return 'Наборы косметики';
-    if (lowerName.includes('посуда') || lowerName.includes('kitchen')) return 'Наборы посуды';
-    return 'Наборы';
-  }
-  if (
-    lowerName.includes('антистресс') ||
-    lowerName.includes('сквиш') ||
-    lowerName.includes('squish')
-  ) {
-    return 'Антистресс игрушки';
-  }
-  if (
-    lowerName.includes('музыкальный') ||
-    lowerName.includes('звук') ||
-    lowerName.includes('music')
-  ) {
-    return 'Музыкальные игрушки';
-  }
-  if (lowerName.includes('мыльные пузыри') || lowerName.includes('bubble')) {
-    return 'Мыльные пузыри';
-  }
-
-  return 'Разные игрушки';
-}
-
 export async function syncProductsToMeilisearch() {
   try {
     console.log('Начинаем синхронизацию с Meilisearch...');
@@ -137,45 +69,6 @@ export async function syncProductsToMeilisearch() {
     console.error('Ошибка синхронизации с Meilisearch:', error);
     throw error;
   }
-}
-
-// Вспомогательные функции для извлечения информации из названия
-function extractKeywords(name: string): string[] {
-  const keywords = [];
-  const lowerName = name.toLowerCase();
-
-  // Извлекаем размеры
-  const sizeMatch = lowerName.match(/(\d+)см/);
-  if (sizeMatch) keywords.push(`размер ${sizeMatch[1]}см`);
-
-  // Извлекаем материалы
-  if (lowerName.includes('метал')) keywords.push('металлический');
-  if (lowerName.includes('мягк')) keywords.push('мягкий');
-  if (lowerName.includes('музык')) keywords.push('музыкальный');
-  if (lowerName.includes('свет')) keywords.push('светящийся');
-  if (lowerName.includes('звук')) keywords.push('со звуком');
-
-  // Извлекаем бренды и серии
-  if (lowerName.includes('eastern express')) keywords.push('eastern express');
-  if (lowerName.includes('western express')) keywords.push('western express');
-  if (lowerName.includes('pandora')) keywords.push('pandora');
-  if (lowerName.includes('pikachu') || lowerName.includes('пикачу')) keywords.push('пикачу');
-  if (lowerName.includes('stitch') || lowerName.includes('стич')) keywords.push('стич');
-
-  return keywords;
-}
-
-function extractSize(name: string): string {
-  const match = name.match(/(\d+)см/);
-  return match ? `${match[1]}см` : '';
-}
-
-function extractMaterial(name: string): string {
-  const lowerName = name.toLowerCase();
-  if (lowerName.includes('метал')) return 'металл';
-  if (lowerName.includes('плюш') || lowerName.includes('мягк')) return 'плюш';
-  if (lowerName.includes('пластик')) return 'пластик';
-  return '';
 }
 
 export async function configureMeilisearch() {
@@ -273,9 +166,6 @@ export async function configureMeilisearch() {
         '+',
         '=',
       ],
-
-      // Настройки стемминга (для русского языка)
-      // Meilisearch автоматически поддерживает русский язык
     });
 
     console.log('Meilisearch настроен для магазина игрушек!');

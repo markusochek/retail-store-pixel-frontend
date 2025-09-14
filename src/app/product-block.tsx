@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import ProductImageHoverArea from '@/app/components/ProductImageHoverArea';
+import { useRouter } from 'next/navigation';
 
 const ProductBlock = ({
   id,
@@ -20,11 +21,18 @@ const ProductBlock = ({
 }) => {
   const [displayedImages, setDisplayedImages] = useState(images);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 0 && e.ctrlKey) {
+    if (isAdmin && e.button === 0 && e.ctrlKey) {
       e.preventDefault();
       fileInputRef.current?.click();
+      return;
+    }
+
+    if (e.button === 0) {
+      e.preventDefault();
+      router.push(`/products/${id}`);
     }
   };
 
@@ -74,10 +82,11 @@ const ProductBlock = ({
   return (
     <div
       className={
-        'flex flex-col whitespace-pre-line bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-shadow'
+        'flex flex-col whitespace-pre-line bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-shadow cursor-pointer'
       }
+      onMouseDown={handleMouseDown}
     >
-      <div className={'cursor-pointer'} onMouseDown={isAdmin ? handleMouseDown : undefined}>
+      <div>
         <ProductImageHoverArea images={displayedImages} />
         <input
           hidden={true}

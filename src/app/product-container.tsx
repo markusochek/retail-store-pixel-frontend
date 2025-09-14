@@ -11,7 +11,6 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
   let products;
 
   if (searchQuery) {
-    // Поиск через Meilisearch
     const searchResults = await productsIndexAdmin.search(searchQuery, {
       attributesToRetrieve: ['id', 'name', 'sale_price', 'images', 'id_from_another_db'],
       limit: 100,
@@ -27,7 +26,7 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-[2%] gap-y-[0.5%] p-[2%] bg-white rounded-4xl">
-      {products.map((product: any) => (
+      {products.map(product => (
         <ProductBlock
           key={product.id}
           id={BigInt(product.id)}
@@ -45,7 +44,7 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
 
       {searchQuery && products.length === 0 && (
         <div className="col-span-full text-center py-8 text-gray-500">
-          Ничего не найдено по запросу "{searchQuery}"
+          Ничего не найдено по запросу {searchQuery}
         </div>
       )}
     </div>

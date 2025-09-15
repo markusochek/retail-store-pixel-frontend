@@ -16,6 +16,19 @@ async function main() {
     });
   }
 
+  const categories = [
+    { id: 1, name: 'toys' },
+    { id: 2, name: 'stationery' },
+  ];
+
+  for (const categoryData of categories) {
+    await prisma.categories.upsert({
+      where: { id: categoryData.id },
+      update: categoryData,
+      create: categoryData,
+    });
+  }
+
   console.log('Seed data created successfully');
 }
 

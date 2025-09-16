@@ -1,6 +1,6 @@
-import { notFound } from 'next/navigation';
 import ProductImageHoverArea from '@/app/components/ProductImageHoverArea';
 import { prisma } from '@/app/lib/db/prisma';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: Promise<{ id: string }>;

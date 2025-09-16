@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductBlock from '@/app/product-block';
+import ProductBlock from '@/app/[locale]/product-block';
 import { prisma } from '@/app/lib/db/prisma';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth/next';

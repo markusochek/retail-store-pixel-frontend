@@ -1,0 +1,27 @@
+{
+  "navigation": {
+    "searchPlaceholder": "Поиск игрушек и канцтоваров...",
+    "login": "Войти",
+    "logout": "Выйти"
+  },
+  "auth": {
+    "login": "Вход",
+    "register": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "noAccount": "Нет аккаунта? Зарегистрируйтесь",
+    "hasAccount": "Уже есть аккаунт? Войдите"
+  },
+  "product": {
+    "price": "{price}₽",
+    "code": "Код: {code}",
+    "category": "Категория: {category}",
+    "description": "Описание",
+    "addToCart": "Добавить в корзину"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успешно"
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import AuthModal from './auth-modal';
-import pictureOfAManOnAuthorization from '@/../public/icons/picture-of-a-man-on-authorization.png';
+import pictureOfAManOnAuthorization from '../../../public/icons/picture-of-a-man-on-authorization.png';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signOut } from 'next-auth/react';

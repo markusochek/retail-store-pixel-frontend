@@ -1,6 +1,6 @@
-import ProductImageHoverArea from '@/app/components/ProductImageHoverArea';
 import { prisma } from '@/app/lib/db/prisma';
 import { notFound } from 'next/navigation';
+import ProductImageGallery from '@/app/components/ProductImageGallery';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -31,7 +31,7 @@ export default async function ProductPage({ params }: PageProps) {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
         <div className="relative">
-          <ProductImageHoverArea images={product.images} />
+          <ProductImageGallery images={product.images} />
         </div>
 
         <div className="space-y-6">
@@ -70,15 +70,4 @@ export default async function ProductPage({ params }: PageProps) {
       </div>
     </div>
   );
-}
-
-// Опционально: Генерация статических параметов
-export async function generateStaticParams() {
-  // Если хотите предварительно сгенерировать страницы для некоторых товаров
-  return [
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-    // Добавьте ID товаров, которые хотите предварительно отрендерить
-  ];
 }

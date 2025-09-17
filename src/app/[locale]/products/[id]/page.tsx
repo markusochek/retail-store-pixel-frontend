@@ -60,10 +60,6 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           )}
 
-          <button className="w-full bg-blue-500 text-white font-semibold py-4 px-6 rounded-xl hover:bg-blue-600 transition-colors shadow-sm">
-            Добавить в корзину
-          </button>
-
           {product.description && (
             <div className="pt-6 border-t border-gray-200">
               <h2 className="text-xl font-semibold mb-4 text-gray-900">Описание</h2>

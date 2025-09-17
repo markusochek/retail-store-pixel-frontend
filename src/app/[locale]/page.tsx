@@ -30,6 +30,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
             sale_price: product.sale_price,
             name: product.name,
             id_from_another_db: product.id_from_another_db,
+            quantity: product.quantity,
           },
         });
       }
@@ -37,10 +38,12 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
   }, 100000);
 
   return (
-    <div className={'flex flex-row flex-wrap justify-center bg-gray-100'}>
-      <div className={'flex flex-col mx-[10%] gap-[0.5%]'}>
-        <Header isEntrance={!!session} searchQuery={searchQuery} />
-        <ProductContainer searchQuery={searchQuery} />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col gap-6">
+          <Header isEntrance={!!session} searchQuery={searchQuery} />
+          <ProductContainer searchQuery={searchQuery} />
+        </div>
       </div>
     </div>
   );

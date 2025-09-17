@@ -28,35 +28,46 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+        <div className="relative">
           <ProductImageHoverArea images={product.images} />
         </div>
 
-        <div>
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
 
-          <div className="text-2xl font-semibold text-emerald-600 mb-4">
-            {product.sale_price.toString()}₽
+          <div className="flex items-center gap-4">
+            <div className="text-3xl font-bold text-emerald-600">
+              {product.sale_price.toString()}₽
+            </div>
+            {product.quantity > 0 ? (
+              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                В наличии
+              </span>
+            ) : (
+              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                Нет в наличии
+              </span>
+            )}
           </div>
 
-          <div className="text-sm text-gray-500 mb-4">
-            Код: {product.id_from_another_db.toString()}
-          </div>
+          <div className="text-sm text-gray-500">Код: {product.id_from_another_db.toString()}</div>
 
           {product.categories && (
-            <div className="text-sm text-gray-500 mb-6">Категория: {product.categories.name}</div>
+            <div className="text-sm text-gray-600">
+              Категория: <span className="font-medium">{product.categories.name}</span>
+            </div>
           )}
 
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+          <button className="w-full bg-blue-500 text-white font-semibold py-4 px-6 rounded-xl hover:bg-blue-600 transition-colors shadow-sm">
             Добавить в корзину
           </button>
 
           {product.description && (
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-2">Описание</h2>
-              <p className="text-gray-700">{product.description}</p>
+            <div className="pt-6 border-t border-gray-200">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Описание</h2>
+              <p className="text-gray-700 leading-relaxed">{product.description}</p>
             </div>
           )}
         </div>

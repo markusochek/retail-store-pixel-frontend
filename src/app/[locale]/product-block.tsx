@@ -9,6 +9,7 @@ const ProductBlock = ({
   idFromAnotherDb,
   name,
   salePrice,
+  quantity,
   isAdmin,
   images,
 }: {
@@ -16,6 +17,7 @@ const ProductBlock = ({
   idFromAnotherDb: bigint;
   name: string;
   salePrice: number;
+  quantity: number;
   isAdmin: boolean;
   images: { id: bigint; path_to_image: string; product_id: bigint }[];
 }) => {
@@ -80,13 +82,12 @@ const ProductBlock = ({
   };
 
   return (
+    // product-block.tsx
     <div
-      className={
-        'flex flex-col whitespace-pre-line bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-shadow cursor-pointer'
-      }
+      className="flex flex-col bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all cursor-pointer group"
       onMouseDown={handleMouseDown}
     >
-      <div>
+      <div className="relative overflow-hidden rounded-lg mb-3">
         <ProductImageHoverArea images={displayedImages} />
         <input
           hidden={true}
@@ -97,9 +98,25 @@ const ProductBlock = ({
           onChange={handleFileChange}
         />
       </div>
-      <div className="flex flex-col justify-center align-center mt-3 space-y-1">
-        <span className="text-lg font-bold">{salePrice}₽</span>
-        <span className={'text-sm font-medium line-clamp-2'}>{name}</span>
+
+      <div className="flex flex-col space-y-2">
+        <span className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+          {name}
+        </span>
+
+        <div className="flex justify-between items-center">
+          <span className="text-2xl font-bold text-green-600">{salePrice}₽</span>
+          {quantity > 0 ? (
+            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+              {quantity} шт
+            </span>
+          ) : (
+            <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">
+              Нет в наличии
+            </span>
+          )}
+        </div>
+
         <span className="text-xs text-gray-500">Код: {idFromAnotherDb}</span>
       </div>
     </div>

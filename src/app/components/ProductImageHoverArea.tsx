@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import thereIsNoPicture from '../../../public/icons/there-is-no-picture.png';
 
 const ProductImageHoverArea = ({
   images,
@@ -12,8 +13,8 @@ const ProductImageHoverArea = ({
 
   if (!images || images.length === 0) {
     return (
-      <div className="relative aspect-[3/4] bg-gray-100 rounded-lg flex items-center justify-center">
-        <span className="text-gray-400">Нет изображения</span>
+      <div className="relative aspect-[3/4] rounded-lg flex items-center justify-center">
+        <Image src={thereIsNoPicture} alt={'Нет изображения'}></Image>
       </div>
     );
   }

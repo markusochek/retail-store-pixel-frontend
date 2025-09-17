@@ -25,13 +25,14 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-[2%] gap-y-[0.5%] p-[2%] bg-white rounded-4xl">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-6 bg-gray-50 rounded-2xl">
       {products.map(product => (
         <ProductBlock
           key={product.id}
           id={BigInt(product.id)}
           idFromAnotherDb={BigInt(product.id_from_another_db || product.id)}
           name={product.name}
+          quantity={product.quantity}
           salePrice={
             typeof product.sale_price === 'number'
               ? product.sale_price
@@ -41,12 +42,6 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
           isAdmin={session ? session.user.role === 'ADMIN' : false}
         />
       ))}
-
-      {searchQuery && products.length === 0 && (
-        <div className="col-span-full text-center py-8 text-gray-500">
-          Ничего не найдено по запросу {searchQuery}
-        </div>
-      )}
     </div>
   );
 };

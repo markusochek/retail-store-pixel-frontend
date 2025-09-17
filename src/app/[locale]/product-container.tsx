@@ -12,12 +12,18 @@ const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
 
   if (searchQuery) {
     const searchResults = await productsIndexAdmin.search(searchQuery, {
-      attributesToRetrieve: ['id', 'name', 'sale_price', 'images', 'id_from_another_db'],
+      attributesToRetrieve: [
+        'id',
+        'name',
+        'sale_price',
+        'images',
+        'id_from_another_db',
+        'quantity',
+      ],
       limit: 100,
     });
     products = searchResults.hits;
   } else {
-    // Все товары из базы
     products = await prisma.products.findMany({
       include: { images: true },
     });

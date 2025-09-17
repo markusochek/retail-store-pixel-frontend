@@ -14,7 +14,7 @@ export default getRequestConfig(async ({ locale }) => {
 
   return {
     locale: verifyLocale,
-    messages: (await import(`../../../messages/${verifyLocale}.json`)).default,
+    messages: (await import(`../../messages/${verifyLocale}.json`)).default,
     timeZone: 'Europe/Samara',
     now: new Date(),
   };

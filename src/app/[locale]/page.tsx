@@ -1,10 +1,10 @@
-import { prisma } from '@/app/lib/db/prisma';
-import { parseProductsFile } from '@/app/lib/helpers/parse-products-files';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { configureMeilisearch, syncProductsToMeilisearch } from '@/app/lib/sync-products';
 import Header from '@/app/[locale]/header';
 import ProductContainer from '@/app/[locale]/product-container';
+import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/sync-products';
+import { parseProductsFile } from '@/lib/helpers/parse-products-files';
+import { prisma } from '@/lib/db/prisma';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;

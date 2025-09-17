@@ -1,6 +1,6 @@
-import { prisma } from '@/app/lib/db/prisma';
 import { notFound } from 'next/navigation';
-import ProductImageGallery from '@/app/components/ProductImageGallery';
+import ProductImageGallery from '@/components/ProductImageGallery';
+import { prisma } from '@/lib/db/prisma';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -8,11 +8,11 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const productId = BigInt(id);
+  const productIdFromAnotherDb = BigInt(id);
   let product;
   try {
     product = await prisma.products.findUnique({
-      where: { id: productId },
+      where: { id_from_another_db: productIdFromAnotherDb },
       include: {
         images: true,
         categories: true,

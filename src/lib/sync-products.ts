@@ -23,13 +23,15 @@ export async function syncProductsToMeilisearch() {
     }));
 
     const deleteTask = await productsIndexAdmin.deleteAllDocuments();
-    await meilisearchAdminClient.tasks.waitForTask(deleteTask.taskUid);
+    await meilisearchAdminClient.tasks.waitForTask(deleteTask.taskUid, { timeout: 30000 });
 
     const task = await productsIndexAdmin.addDocuments(documents, {
       primaryKey: 'id',
     });
 
-    const completedTask = await meilisearchAdminClient.tasks.waitForTask(task.taskUid);
+    const completedTask = await meilisearchAdminClient.tasks.waitForTask(task.taskUid, {
+      timeout: 30000,
+    });
 
     if (completedTask.status === 'failed') {
       console.error('Задача завершилась с ошибкой:', completedTask.error);

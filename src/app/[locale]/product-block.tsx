@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useCallback, useRef, useState } from 'react';
-import ProductImageHoverArea from '@/app/components/ProductImageHoverArea';
 import { useRouter } from 'next/navigation';
+import ProductImageHoverArea from '@/components/ProductImageHoverArea';
 
 const ProductBlock = ({
   id,
@@ -78,7 +78,7 @@ const ProductBlock = ({
 
     if (e.button === 0) {
       e.preventDefault();
-      router.push(`/products/${id}`);
+      router.push(`/products/${idFromAnotherDb}`);
     }
   };
 

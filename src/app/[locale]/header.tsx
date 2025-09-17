@@ -46,12 +46,7 @@ const Header = ({
   return (
     // header.tsx
     <header className="bg-white flex justify-between items-center rounded-2xl p-4 shadow-sm border border-gray-100">
-      <Image
-        src={logo}
-        alt="Logo"
-        className="w-32 h-auto object-contain" // фиксированная ширина лого
-      />
-
+      <Image src={logo} alt="Logo" className={'ml-5'} />
       <div className="flex-1 max-w-xl mx-4">
         <form
           onSubmit={handleSearchSubmit}
@@ -66,7 +61,7 @@ const Header = ({
           />
           <button
             type="submit"
-            className="flex justify-center items-center w-12 h-10 bg-red-500 rounded-xl hover:bg-red-600 transition-colors cursor-pointer ml-1"
+            className="flex justify-center items-center w-12 h-10 bg-[#D83232] rounded-xl hover:bg-red-600 transition-colors cursor-pointer ml-1"
           >
             <Image src={magnifier} alt={'Поиск'} className="h-5 w-5 filter invert" />
           </button>
@@ -79,9 +74,9 @@ const Header = ({
             <Image
               src={pictureOfAManOnAuthorization}
               alt="User avatar"
-              width={30}
-              height={30}
-              className={'mr-2'}
+              width={45}
+              height={45}
+              className={'mr-5'}
             />
           </div>
         ) : (

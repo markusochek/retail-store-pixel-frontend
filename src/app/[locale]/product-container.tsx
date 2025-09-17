@@ -1,9 +1,9 @@
 import React from 'react';
 import ProductBlock from '@/app/[locale]/product-block';
-import { prisma } from '@/app/lib/db/prisma';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth/next';
-import { productsIndexAdmin } from '@/app/lib/meilisearch';
+import { productsIndexAdmin } from '@/lib/meilisearch';
+import { prisma } from '@/lib/db/prisma';
 
 const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
   const session = await getServerSession(authOptions);

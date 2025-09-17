@@ -4,7 +4,7 @@ import './globals.css';
 import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { defaultLocale, Locale, locales } from '@/app/lib/i18n';
+import { defaultLocale, Locale, locales } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: 'Pixel',

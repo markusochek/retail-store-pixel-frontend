@@ -1,5 +1,3 @@
-'use client';
-
 import logo from '../../../public/icons/logo.svg';
 import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';

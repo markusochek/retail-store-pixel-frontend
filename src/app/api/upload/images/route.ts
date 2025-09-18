@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { unlink, writeFile } from 'fs/promises';
 import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
-import { syncProductsToMeilisearch } from '@/lib/sync-products';
+import { syncProductsToMeilisearch } from '@/lib/syncProducts';
 import { prisma } from '@/lib/db/prisma';
 
 export async function POST(request: Request) {

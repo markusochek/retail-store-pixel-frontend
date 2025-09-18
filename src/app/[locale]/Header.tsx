@@ -7,7 +7,7 @@ import magnifier from '../../../public/icons/magnifier.svg';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import AuthModal from '@/app/[locale]/auth-modal';
+import AuthModal from '@/app/[locale]/AuthModal';
 
 const Header = ({
   isEntrance,

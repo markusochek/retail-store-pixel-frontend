@@ -1,8 +1,8 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Header from '@/app/[locale]/header';
-import ProductContainer from '@/app/[locale]/product-container';
-import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/sync-products';
+import Header from '@/app/[locale]/Header';
+import ProductContainer from '@/app/[locale]/ProductContainer';
+import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/syncProducts';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;

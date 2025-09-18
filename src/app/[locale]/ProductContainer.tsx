@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductBlock from '@/app/[locale]/product-block';
+import ProductBlock from '@/app/[locale]/ProductBlock';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth/next';
 import { productsIndexAdmin } from '@/lib/meilisearch';

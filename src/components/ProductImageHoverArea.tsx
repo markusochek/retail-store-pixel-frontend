@@ -39,6 +39,7 @@ const ProductImageHoverArea = ({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 400px"
+            priority={currentImageIndex <= 10}
           />
         </div>
 

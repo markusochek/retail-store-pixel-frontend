@@ -3,8 +3,6 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Header from '@/app/[locale]/header';
 import ProductContainer from '@/app/[locale]/product-container';
 import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/sync-products';
-import { parseProductsFile } from '@/lib/helpers/parse-products-files';
-import { prisma } from '@/lib/db/prisma';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;
@@ -18,24 +16,24 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
   await syncProductsToMeilisearch();
   await configureMeilisearch();
 
-  const syncProducts = setInterval(async () => {
-    const products = parseProductsFile('products');
-    for (const product of products) {
-      const exists = await prisma.products.findUnique({
-        where: { id_from_another_db: product.id_from_another_db },
-      });
-      if (!exists) {
-        await prisma.products.create({
-          data: {
-            sale_price: product.sale_price,
-            name: product.name,
-            id_from_another_db: product.id_from_another_db,
-            quantity: product.quantity,
-          },
-        });
-      }
-    }
-  }, 100000);
+  // const syncProducts = setInterval(async () => {
+  //   const products = parseProductsFile('products');
+  //   for (const product of products) {
+  //     const exists = await prisma.products.findUnique({
+  //       where: { id_from_another_db: product.id_from_another_db },
+  //     });
+  //     if (!exists) {
+  //       await prisma.products.create({
+  //         data: {
+  //           sale_price: product.sale_price,
+  //           name: product.name,
+  //           id_from_another_db: product.id_from_another_db,
+  //           quantity: product.quantity,
+  //         },
+  //       });
+  //     }
+  //   }
+  // }, 100000);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

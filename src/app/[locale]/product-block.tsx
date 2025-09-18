@@ -2,7 +2,7 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ProductImageHoverArea from '@/components/ProductImageHoverArea';
+import ProductImageHoverArea from '@/components/ui/ProductImageHoverArea';
 
 const ProductBlock = ({
   id,

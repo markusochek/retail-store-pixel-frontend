@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import ProductImageGallery from '@/components/ProductImageGallery';
+import ProductImageGallery from '@/components/ui/ProductImageGallery';
 import { prisma } from '@/lib/db/prisma';
 
 interface PageProps {

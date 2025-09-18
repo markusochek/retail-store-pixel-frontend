@@ -5,13 +5,13 @@ import { getServerSession } from 'next-auth/next';
 import { productsIndexAdmin } from '@/lib/meilisearch';
 import { prisma } from '@/lib/db/prisma';
 
-const ProductContainer = async ({ searchQuery }: { searchQuery: string }) => {
+const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: string }) => {
   const session = await getServerSession(authOptions);
 
   let products;
 
-  if (searchQuery) {
-    const searchResults = await productsIndexAdmin.search(searchQuery, {
+  if (initialSearchQuery) {
+    const searchResults = await productsIndexAdmin.search(initialSearchQuery, {
       attributesToRetrieve: [
         'id',
         'name',

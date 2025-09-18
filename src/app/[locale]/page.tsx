@@ -11,7 +11,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
     searchParams,
   ]);
 
-  const searchQuery = resolvedSearchParams.q || '';
+  const initialSearchQuery = resolvedSearchParams.q || '';
 
   await syncProductsToMeilisearch();
   await configureMeilisearch();
@@ -39,8 +39,8 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col gap-6">
-          <Header isEntrance={!!session} searchQuery={searchQuery} />
-          <ProductContainer searchQuery={searchQuery} />
+          <Header isEntrance={!!session} initialSearchQuery={initialSearchQuery} />
+          <ProductContainer initialSearchQuery={initialSearchQuery} />
         </div>
       </div>
     </div>

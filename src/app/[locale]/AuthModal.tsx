@@ -117,7 +117,7 @@ const AuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={modalIsOpen}
       onRequestClose={onClose}
       onAfterClose={() => {
         setError('');

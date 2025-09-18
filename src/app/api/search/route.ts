@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { productsIndexAdmin } from '@/app/lib/meilisearch';
+import { productsIndexAdmin } from '@/lib/meilisearch';
 
 export async function GET(request: NextRequest) {
   try {

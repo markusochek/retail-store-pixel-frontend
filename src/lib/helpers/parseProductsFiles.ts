@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import logger from '@/lib/logger';
+import loggerServer from '@/lib/logger/logger-server';
 
 export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
   try {
@@ -21,7 +21,7 @@ export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
       const parts = lines[i].split(/\t|\s{2,}/).filter((part: string) => part !== '');
 
       if (parts.length !== headers.length) {
-        logger.warn(`Строка ${i} имеет неверное количество колонок:`, parts);
+        loggerServer.warn(`Строка ${i} имеет неверное количество колонок:`, parts);
         continue;
       }
 
@@ -34,13 +34,13 @@ export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
           quantity: parseFloat(parts[4].replace(',', '.')),
         });
       } catch (error) {
-        logger.warn(`Ошибка обработки строки ${i}:`, error);
+        loggerServer.warn(`Ошибка обработки строки ${i}:`, error);
       }
     }
 
     return products;
   } catch (error) {
-    logger.error('Ошибка парсинга файла:', error);
+    loggerServer.error('Ошибка парсинга файла:', error);
     return [];
   }
 };

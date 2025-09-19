@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-const logger = winston.createLogger({
+const loggerServer = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
   format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
   transports: [
@@ -17,4 +17,4 @@ const logger = winston.createLogger({
   ],
 });
 
-export default logger;
+export default loggerServer;

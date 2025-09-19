@@ -1,6 +1,6 @@
 import { prisma } from './db/prisma';
 import { meilisearchAdminClient, productsIndexAdmin } from './meilisearch';
-import logger from '@/lib/logger';
+import loggerServer from '@/lib/logger/logger-server';
 
 export async function syncProductsToMeilisearch() {
   try {
@@ -35,13 +35,13 @@ export async function syncProductsToMeilisearch() {
     });
 
     if (completedTask.status === 'failed') {
-      logger.error('Задача завершилась с ошибкой:', completedTask.error);
+      loggerServer.error('Задача завершилась с ошибкой:', completedTask.error);
       throw new Error(completedTask.error?.message || 'Task failed');
     }
 
     return await productsIndexAdmin.getStats();
   } catch (error) {
-    logger.error('Ошибка синхронизации с Meilisearch:', error);
+    loggerServer.error('Ошибка синхронизации с Meilisearch:', error);
     throw error;
   }
 }
@@ -130,6 +130,6 @@ export async function configureMeilisearch() {
       ],
     });
   } catch (error) {
-    logger.error('Ошибка настройки Meilisearch:', error);
+    loggerServer.error('Ошибка настройки Meilisearch:', error);
   }
 }

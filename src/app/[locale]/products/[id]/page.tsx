@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import ProductImageGallery from '@/app/[locale]/products/[id]/components/ProductImageGallery';
-import logger from '@/lib/logger';
+import loggerServer from '@/lib/logger/logger-server';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -20,7 +20,7 @@ export default async function ProductPage({ params }: PageProps) {
       },
     });
   } catch (error) {
-    logger.error('Error fetching product:', error, {
+    loggerServer.error('Error fetching product:', error, {
       productId: productIdFromAnotherDb.toString(),
     });
     return null;

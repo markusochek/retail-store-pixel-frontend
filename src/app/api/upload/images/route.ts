@@ -4,7 +4,7 @@ import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { syncProductsToMeilisearch } from '@/lib/syncProducts';
 import { prisma } from '@/lib/db/prisma';
-import logger from '@/lib/logger';
+import loggerServer from '@/lib/logger/logger-server';
 
 export async function POST(request: Request) {
   let transaction;
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
           try {
             await unlink(oldFilePath);
           } catch (error) {
-            logger.warn(`Could not delete file ${oldFilename}:`, error);
+            loggerServer.warn(`Could not delete file ${oldFilename}:`, error);
           }
         }
 
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
       uploadedFiles: transaction.newImages,
     });
   } catch (error) {
-    logger.error('Transaction error:', error);
+    loggerServer.error('Transaction error:', error);
 
     return NextResponse.json(
       {

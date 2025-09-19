@@ -3,7 +3,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProductImageHoverArea from '@/app/[locale]/components/components-product-container/compoments-product-block/ProductImageHoverArea';
-import logger from '@/lib/logger';
 
 const ProductBlock = ({
   id,
@@ -125,7 +124,7 @@ const ProductBlock = ({
 
       alert(`Успешно загружено ${data.uploadedFiles.length} изображений`);
     } catch (error) {
-      logger.error('Ошибка загрузки:', error);
+      console.error('Ошибка загрузки:', error);
       alert(error instanceof Error ? error.message : 'Не удалось загрузить изображения');
     } finally {
       setIsUploading(false);

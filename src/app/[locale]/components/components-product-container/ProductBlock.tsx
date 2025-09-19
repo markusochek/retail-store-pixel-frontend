@@ -4,6 +4,9 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProductImageHoverArea from '@/app/[locale]/components/components-product-container/compoments-product-block/ProductImageHoverArea';
 import ProductInfo from '@/app/[locale]/components/components-product-container/compoments-product-block/ProductsInfo';
+import FileUploadInput from '@/app/[locale]/components/components-product-container/compoments-product-block/FileUploadInput';
+import uploadImages from '../../../../../public/icons/upload-icon.svg';
+import Image from 'next/image';
 
 const ProductBlock = ({
   id,
@@ -65,11 +68,6 @@ const ProductBlock = ({
     },
     [isAdmin]
   );
-
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    await handleFilesUpload(files);
-  };
 
   const handleFilesUpload = async (files: File[]) => {
     if (!files || files.length === 0) return;
@@ -154,19 +152,7 @@ const ProductBlock = ({
       {isAdmin && isDragOver && (
         <div className="absolute inset-0 bg-blue-100 bg-opacity-50 border-2 border-dashed border-blue-400 rounded-xl flex items-center justify-center z-20">
           <div className="text-center">
-            <svg
-              className="w-12 h-12 text-blue-500 mx-auto mb-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
+            <Image src={uploadImages} alt={''} className="w-12 h-12 mx-auto mb-2" />
             <p className="text-blue-600 font-medium">Отпустите чтобы загрузить</p>
           </div>
         </div>
@@ -174,15 +160,7 @@ const ProductBlock = ({
 
       <div className="relative overflow-hidden rounded-lg mb-3">
         <ProductImageHoverArea images={displayedImages} />
-
-        <input
-          hidden={true}
-          type="file"
-          multiple
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={onFileChange}
-        />
+        <FileUploadInput fileInputRef={fileInputRef}></FileUploadInput>
       </div>
 
       <ProductInfo

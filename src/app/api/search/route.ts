@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { productsIndexAdmin } from '@/lib/meilisearch';
+import logger from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error('Search API error:', error);
+    logger.error('Search API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

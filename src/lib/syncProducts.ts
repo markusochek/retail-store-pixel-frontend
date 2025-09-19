@@ -1,5 +1,6 @@
 import { prisma } from './db/prisma';
 import { meilisearchAdminClient, productsIndexAdmin } from './meilisearch';
+import logger from '@/lib/logger';
 
 export async function syncProductsToMeilisearch() {
   try {
@@ -34,13 +35,13 @@ export async function syncProductsToMeilisearch() {
     });
 
     if (completedTask.status === 'failed') {
-      console.error('Задача завершилась с ошибкой:', completedTask.error);
+      logger.error('Задача завершилась с ошибкой:', completedTask.error);
       throw new Error(completedTask.error?.message || 'Task failed');
     }
 
     return await productsIndexAdmin.getStats();
   } catch (error) {
-    console.error('Ошибка синхронизации с Meilisearch:', error);
+    logger.error('Ошибка синхронизации с Meilisearch:', error);
     throw error;
   }
 }
@@ -129,6 +130,6 @@ export async function configureMeilisearch() {
       ],
     });
   } catch (error) {
-    console.error('Ошибка настройки Meilisearch:', error);
+    logger.error('Ошибка настройки Meilisearch:', error);
   }
 }

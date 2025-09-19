@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Header from '@/app/[locale]/Header';
-import ProductContainer from '@/app/[locale]/ProductContainer';
+import Header from '@/app/[locale]/components/Header';
+import ProductContainer from '@/app/[locale]/components/ProductContainer';
 import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/syncProducts';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {

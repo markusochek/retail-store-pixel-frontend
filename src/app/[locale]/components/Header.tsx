@@ -1,7 +1,7 @@
-import logo from '../../../public/icons/logo.svg';
+import logo from '@/../public/icons/logo.svg';
 import Image from 'next/image';
-import SearchBar from '@/components/SearchBar';
-import UserMenu from '@/components/UserMenu';
+import SearchBar from '@/app/[locale]/components/components-header/SearchBar';
+import UserMenu from '@/app/[locale]/components/components-header/UserMenu';
 
 const Header = ({
   isEntrance,

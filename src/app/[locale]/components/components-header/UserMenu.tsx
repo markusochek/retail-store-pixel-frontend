@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import pictureOfAManOnAuthorization from '../../public/icons/picture-of-a-man-on-authorization.png';
-import simpleUser from '../../public/icons/simple-user.png'; // Добавь эту иконку
-import AuthModal from '@/app/[locale]/AuthModal';
+import pictureOfAManOnAuthorization from '@/../public/icons/picture-of-a-man-on-authorization.png';
+import simpleUser from '@/../public/icons/simple-user.png';
+import AuthModal from '@/app/[locale]/components/components-header/components-user-menu/AuthModal';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import logger from '@/lib/logger';
 
 const UserMenu = ({ isEntrance }: { isEntrance: boolean }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -19,7 +20,7 @@ const UserMenu = ({ isEntrance }: { isEntrance: boolean }) => {
       router.refresh();
       setShowLogoutHint(false);
     } catch (error) {
-      console.error('Произошла ошибка при выходе');
+      logger.error('Произошла ошибка при выходе', error);
     }
   };
 

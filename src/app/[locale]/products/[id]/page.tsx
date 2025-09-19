@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import ProductImageGallery from '@/components/ProductImageGallery';
 import { prisma } from '@/lib/db/prisma';
+import ProductImageGallery from '@/app/[locale]/products/[id]/components/ProductImageGallery';
+import logger from '@/lib/logger';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -19,7 +20,9 @@ export default async function ProductPage({ params }: PageProps) {
       },
     });
   } catch (error) {
-    console.error('Error fetching product:', error);
+    logger.error('Error fetching product:', error, {
+      productId: productIdFromAnotherDb.toString(),
+    });
     return null;
   }
 

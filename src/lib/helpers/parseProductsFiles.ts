@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import logger from '@/lib/logger';
 
 export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
   try {
@@ -20,7 +21,7 @@ export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
       const parts = lines[i].split(/\t|\s{2,}/).filter((part: string) => part !== '');
 
       if (parts.length !== headers.length) {
-        console.warn(`Строка ${i} имеет неверное количество колонок:`, parts);
+        logger.warn(`Строка ${i} имеет неверное количество колонок:`, parts);
         continue;
       }
 
@@ -32,14 +33,14 @@ export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
           sale_price: parseFloat(parts[3].replace(/\s/g, '').replace(',', '.')),
           quantity: parseFloat(parts[4].replace(',', '.')),
         });
-      } catch (e: any) {
-        console.warn(`Ошибка обработки строки ${i}:`, e.message);
+      } catch (error) {
+        logger.warn(`Ошибка обработки строки ${i}:`, error);
       }
     }
 
     return products;
-  } catch (e: any) {
-    console.error('Ошибка парсинга файла:', e.message);
+  } catch (error) {
+    logger.error('Ошибка парсинга файла:', error);
     return [];
   }
 };

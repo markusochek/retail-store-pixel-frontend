@@ -19,7 +19,6 @@ export async function syncProductsToMeilisearch() {
       category_id: product.category_id.toString(),
       category_name: product.categories?.name || 'Разные игрушки',
       images: product.images.map(img => img.path_to_image),
-      id_from_another_db: product.id_from_another_db.toString(),
       quantity: product.quantity,
     }));
 
@@ -51,15 +50,7 @@ export async function configureMeilisearch() {
     await productsIndexAdmin.updateSettings({
       searchableAttributes: ['name', 'category_name', 'description'],
 
-      displayedAttributes: [
-        'id',
-        'name',
-        'sale_price',
-        'category_name',
-        'images',
-        'id_from_another_db',
-        'quantity',
-      ],
+      displayedAttributes: ['id', 'name', 'sale_price', 'category_name', 'images', 'quantity'],
 
       filterableAttributes: ['category_name', 'sale_price'],
 

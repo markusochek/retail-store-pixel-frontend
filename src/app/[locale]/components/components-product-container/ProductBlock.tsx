@@ -10,7 +10,6 @@ import Image from 'next/image';
 
 const ProductBlock = ({
   id,
-  idFromAnotherDb,
   name,
   salePrice,
   quantity,
@@ -18,7 +17,6 @@ const ProductBlock = ({
   images,
 }: {
   id: bigint;
-  idFromAnotherDb: bigint;
   name: string;
   salePrice: number;
   quantity: number;
@@ -129,7 +127,7 @@ const ProductBlock = ({
 
     if (e.button === 0) {
       e.preventDefault();
-      router.push(`/products/${idFromAnotherDb}`);
+      router.push(`/products/${id}`);
     }
   };
 
@@ -163,12 +161,7 @@ const ProductBlock = ({
         <FileUploadInput fileInputRef={fileInputRef}></FileUploadInput>
       </div>
 
-      <ProductInfo
-        name={name}
-        quantity={quantity}
-        salePrice={salePrice}
-        idFromAnotherDb={idFromAnotherDb}
-      ></ProductInfo>
+      <ProductInfo name={name} quantity={quantity} salePrice={salePrice} id={id}></ProductInfo>
     </div>
   );
 };

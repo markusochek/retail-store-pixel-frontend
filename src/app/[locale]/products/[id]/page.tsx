@@ -9,11 +9,11 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const productIdFromAnotherDb = BigInt(id);
+  const productId = BigInt(id);
   let product;
   try {
     product = await prisma.products.findUnique({
-      where: { id_from_another_db: productIdFromAnotherDb },
+      where: { id: productId },
       include: {
         images: true,
         categories: true,
@@ -21,7 +21,7 @@ export default async function ProductPage({ params }: PageProps) {
     });
   } catch (error) {
     loggerServer.error('Error fetching product:', error, {
-      productId: productIdFromAnotherDb.toString(),
+      productId: productId.toString(),
     });
     return null;
   }
@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: PageProps) {
             )}
           </div>
 
-          <div className="text-sm text-gray-500">Код: {product.id_from_another_db.toString()}</div>
+          <div className="text-sm text-gray-500">Код: {product.id.toString()}</div>
 
           {product.categories && (
             <div className="text-sm text-gray-600">

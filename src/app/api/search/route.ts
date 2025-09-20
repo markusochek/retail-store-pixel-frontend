@@ -26,14 +26,7 @@ export async function GET(request: NextRequest) {
     const filterString = filters.length > 0 ? filters.join(' AND ') : undefined;
 
     const results = await productsIndexAdmin.search(query, {
-      attributesToRetrieve: [
-        'id',
-        'name',
-        'sale_price',
-        'category_name',
-        'images',
-        'id_from_another_db',
-      ],
+      attributesToRetrieve: ['id', 'name', 'sale_price', 'category_name', 'images'],
       attributesToHighlight: ['name', 'description'],
       limit,
       filter: filterString,

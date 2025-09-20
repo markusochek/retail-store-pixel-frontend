@@ -12,14 +12,7 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
 
   if (initialSearchQuery) {
     const searchResults = await productsIndexAdmin.search(initialSearchQuery, {
-      attributesToRetrieve: [
-        'id',
-        'name',
-        'sale_price',
-        'images',
-        'id_from_another_db',
-        'quantity',
-      ],
+      attributesToRetrieve: ['id', 'name', 'sale_price', 'images', 'quantity'],
       limit: 100,
     });
     products = searchResults.hits;
@@ -27,7 +20,7 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
     products = await prisma.products.findMany({
       include: { images: true },
     });
-    products.sort((a, b) => Number(a.id_from_another_db - b.id_from_another_db));
+    products.sort((a, b) => Number(a.id - b.id));
   }
 
   return (
@@ -36,7 +29,6 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
         <ProductBlock
           key={product.id}
           id={BigInt(product.id)}
-          idFromAnotherDb={BigInt(product.id_from_another_db || product.id)}
           name={product.name}
           quantity={product.quantity}
           salePrice={

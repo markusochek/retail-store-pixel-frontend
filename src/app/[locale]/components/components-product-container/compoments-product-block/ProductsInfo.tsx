@@ -4,12 +4,12 @@ const ProductInfo = ({
   name,
   salePrice,
   quantity,
-  idFromAnotherDb,
+  id,
 }: {
   name: string;
   salePrice: number;
   quantity: number;
-  idFromAnotherDb: bigint;
+  id: bigint;
 }) => {
   return (
     <div className="flex flex-col space-y-2">
@@ -30,7 +30,7 @@ const ProductInfo = ({
         )}
       </div>
 
-      <span className="text-xs text-gray-500">Код: {idFromAnotherDb.toString()}</span>
+      <span className="text-xs text-gray-500">Код: {id.toString()}</span>
     </div>
   );
 };

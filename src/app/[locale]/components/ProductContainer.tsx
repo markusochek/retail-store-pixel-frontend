@@ -28,14 +28,10 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
       {products.map(product => (
         <ProductBlock
           key={product.id}
-          id={BigInt(product.id)}
+          id={product.id}
           name={product.name}
           quantity={product.quantity}
-          salePrice={
-            typeof product.sale_price === 'number'
-              ? product.sale_price
-              : product.sale_price.toNumber()
-          }
+          salePrice={parseFloat(product.sale_price.toString())}
           images={product.images || []}
           isAdmin={session ? session.user.role === 'ADMIN' : false}
         />

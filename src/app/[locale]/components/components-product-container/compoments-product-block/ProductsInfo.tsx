@@ -9,7 +9,7 @@ const ProductInfo = ({
   name: string;
   salePrice: number;
   quantity: number;
-  id: bigint;
+  id: number;
 }) => {
   return (
     <div className="flex flex-col space-y-2">

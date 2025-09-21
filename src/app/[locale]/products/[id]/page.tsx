@@ -9,7 +9,7 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const productId = BigInt(id);
+  const productId = id;
   let product;
   try {
     product = await prisma.products.findUnique({

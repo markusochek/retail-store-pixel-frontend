@@ -8,10 +8,10 @@ datasource db {
 }
 
 model users {
-  id            BigInt   @id(map: "users_pk") @default(autoincrement())
+  id            Int      @id(map: "users_pk") @default(autoincrement())
   email         String   @unique(map: "users_unique_email") @db.VarChar(255)
   password      Bytes
-  role_id       BigInt   @default(2)
+  role_id       Int      @default(2)
   refresh_token String?  @db.VarChar(255)
   created_at    DateTime @default(now()) @db.Date
   updated_at    DateTime @default(now()) @db.Date
@@ -19,31 +19,31 @@ model users {
 }
 
 model products {
-  sale_price  Decimal    @db.Decimal
+  sale_price  Decimal    @db.Decimal(10, 2)
   name        String     @db.VarChar(255)
-  id          BigInt     @id(map: "products_pk") @default(autoincrement())
+  id          Int        @id(map: "products_pk") @default(autoincrement())
   description String?
-  category_id BigInt     @default(1)
+  category_id Int        @default(1)
   quantity    Int
   images      images[]
   categories  categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_categories_fk")
 }
 
 model roles {
-  id    BigInt  @id(map: "roles_pk") @default(autoincrement())
+  id    Int     @id(map: "roles_pk") @default(autoincrement())
   name  String  @db.VarChar(63)
   users users[]
 }
 
 model images {
-  id            BigInt   @id(map: "images_pk") @default(autoincrement())
+  id            Int      @id(map: "images_pk") @default(autoincrement())
   path_to_image String   @db.VarChar(255)
-  product_id    BigInt
+  product_id    Int
   products      products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "images_products_fk")
 }
 
 model categories {
-  id       BigInt     @id(map: "categories_pk") @default(autoincrement())
+  id       Int        @id(map: "categories_pk") @default(autoincrement())
   name     String     @unique(map: "categories_unique_name") @db.VarChar(255)
   products products[]
 }

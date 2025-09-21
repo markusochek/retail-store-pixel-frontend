@@ -16,12 +16,12 @@ const ProductBlock = ({
   isAdmin,
   images,
 }: {
-  id: bigint;
+  id: number;
   name: string;
   salePrice: number;
   quantity: number;
   isAdmin: boolean;
-  images: { id: bigint; path_to_image: string; product_id: bigint }[];
+  images: { id: number; path_to_image: string; product_id: number }[];
 }) => {
   const [displayedImages, setDisplayedImages] = useState(images);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -101,7 +101,7 @@ const ProductBlock = ({
 
       const data: {
         message: string;
-        uploadedFiles: { id: bigint; path_to_image: string; product_id: bigint }[];
+        uploadedFiles: { id: number; path_to_image: string; product_id: number }[];
       } = await response.json();
 
       setDisplayedImages(data.uploadedFiles);

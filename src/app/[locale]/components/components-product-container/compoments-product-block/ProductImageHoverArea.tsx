@@ -7,7 +7,7 @@ import thereIsNoPicture from '@/../public/icons/there-is-no-picture.png';
 const ProductImageHoverArea = ({
   images,
 }: {
-  images: { id: bigint; path_to_image: string; product_id: bigint }[];
+  images: { id: number; path_to_image: string; product_id: number }[];
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

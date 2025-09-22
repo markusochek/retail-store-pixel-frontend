@@ -5,10 +5,12 @@ import Image from 'next/image';
 import pictureOfAManOnAuthorization from '@/../public/icons/picture-of-a-man-on-authorization.png';
 import simpleUser from '@/../public/icons/simple-user.png';
 import AuthModal from '@/app/[locale]/components/components-header/components-user-menu/AuthModal';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-const UserMenu = ({ isEntrance }: { isEntrance: boolean }) => {
+const UserMenu = () => {
+  const { data: session } = useSession();
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [showLogoutHint, setShowLogoutHint] = useState(false);
   const router = useRouter();
@@ -24,7 +26,7 @@ const UserMenu = ({ isEntrance }: { isEntrance: boolean }) => {
   };
 
   const handleAvatarClick = () => {
-    if (isEntrance) {
+    if (session) {
       setShowLogoutHint(prev => !prev);
     } else {
       setIsAuthModalOpen(true);
@@ -43,7 +45,7 @@ const UserMenu = ({ isEntrance }: { isEntrance: boolean }) => {
           className="p-1 rounded-full hover:bg-gray-100 transition-colors mr-5"
         >
           <Image
-            src={isEntrance ? pictureOfAManOnAuthorization : simpleUser}
+            src={session ? pictureOfAManOnAuthorization : simpleUser}
             alt="User avatar"
             className="cursor-pointer w-8 h-8"
           />

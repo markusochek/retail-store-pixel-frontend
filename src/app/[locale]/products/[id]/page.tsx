@@ -13,7 +13,7 @@ export default async function ProductPage({ params }: PageProps) {
   let product;
   try {
     product = await prisma.products.findUnique({
-      where: { id: productId },
+      where: { id: Number(productId) },
       include: {
         images: true,
         categories: true,

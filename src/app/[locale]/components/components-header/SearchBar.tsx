@@ -5,10 +5,12 @@ import magnifier from '@/../public/icons/magnifier.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-const SearchBar = ({ initialSearchQuery }: { initialSearchQuery: string }) => {
+const SearchBar = () => {
+  const searchParams = useSearchParams();
+  const initialSearchQuery = searchParams.get('q') || '';
+
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

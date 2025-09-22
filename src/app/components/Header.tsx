@@ -1,0 +1,20 @@
+// src/app/[locale]/components/Header.tsx
+import React from 'react';
+import Image from 'next/image';
+import logo from '../../../public/icons/logo.svg';
+import SearchBar from '@/app/[locale]/components/components-header/SearchBar';
+import UserMenu from '@/app/[locale]/components/components-header/UserMenu';
+import Favorites from '@/app/[locale]/components/components-header/Favorites';
+
+const Header = () => {
+  return (
+    <header className="bg-white flex justify-between items-center rounded-2xl p-4 shadow-sm border border-gray-100 mx-4 mt-4">
+      <Image src={logo} alt="Logo" className="ml-5" />
+      <SearchBar />
+      <Favorites />
+      <UserMenu />
+    </header>
+  );
+};
+
+export default Header;

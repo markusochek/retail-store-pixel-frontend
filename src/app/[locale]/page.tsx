@@ -1,17 +1,11 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Header from '@/app/[locale]/components/Header';
+// src/app/[locale]/page.tsx
 import ProductContainer from '@/app/[locale]/components/ProductContainer';
 import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/syncProducts';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;
-  const [session, resolvedSearchParams] = await Promise.all([
-    getServerSession(authOptions),
-    searchParams,
-  ]);
 
-  const initialSearchQuery = resolvedSearchParams.q || '';
+  const initialSearchQuery = searchParams.q || '';
 
   await syncProductsToMeilisearch();
   await configureMeilisearch();
@@ -37,9 +31,8 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto">
         <div className="flex flex-col gap-6">
-          <Header isEntrance={!!session} initialSearchQuery={initialSearchQuery} />
           <ProductContainer initialSearchQuery={initialSearchQuery} />
         </div>
       </div>

@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
     }
 
-    // Строим фильтры
     const filters = [];
     if (category) {
       filters.push(`category_name = "${category}"`);

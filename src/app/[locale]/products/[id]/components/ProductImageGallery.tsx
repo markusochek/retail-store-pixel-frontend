@@ -30,7 +30,6 @@ const ProductImageGallery = ({ images }: { images: { path_to_image: string }[] }
     };
   }, [emblaApi, onSelect]);
 
-  // Если изображений нет — ничего не рендерим
   if (!images || images.length === 0) return null;
 
   return (

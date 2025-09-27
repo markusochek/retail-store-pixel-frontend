@@ -1,4 +1,3 @@
-// app/lib/i18n.ts
 import { getRequestConfig } from 'next-intl/server';
 
 export const locales = ['ru', 'en'] as const;

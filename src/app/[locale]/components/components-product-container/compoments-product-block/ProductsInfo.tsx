@@ -5,20 +5,25 @@ const ProductInfo = ({
   salePrice,
   quantity,
   id,
+  onMouseDown,
 }: {
   name: string;
   salePrice: number;
   quantity: number;
   id: number;
+  onMouseDown: (e: React.MouseEvent) => void;
 }) => {
   return (
     <div className="flex flex-col space-y-2">
-      <span className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+      <span
+        onMouseDown={onMouseDown}
+        className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 cursor-pointer"
+      >
         {name}
       </span>
 
       <div className="flex justify-between items-center">
-        <span className="text-2xl font-bold text-green-600">{salePrice}₽</span>
+        <span className="text-2xl font-bold text-green-600">{salePrice.toString()}₽</span>
         {quantity > 0 ? (
           <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
             {quantity} шт

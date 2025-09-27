@@ -94,7 +94,7 @@ const AuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
         handleSuccess();
       }
     } catch (error) {
-      logger.error('Auth error:', error);
+      console.error('Auth error:', error);
       setError('Произошла ошибка при входе после регистрации');
     } finally {
       setIsLoading(false);

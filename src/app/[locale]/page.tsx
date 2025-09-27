@@ -1,4 +1,3 @@
-// src/app/[locale]/page.tsx
 import ProductContainer from '@/app/[locale]/components/ProductContainer';
 import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/syncProducts';
 

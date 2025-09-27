@@ -1,38 +1,34 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import heart from '@/../public/icons/heart.svg';
-import heartFilled from '@/../public/icons/heart-filled.svg';
+import { useRouter } from 'next/navigation';
 
-const Favorites = () => {
-  const [isFavoritesSelected, setIsFavoritesSelected] = useState(false);
+interface FavoritesProps {
+  favoritesCount: number;
+}
 
-  useEffect(() => {
-    let isFavoritesSelectedFromLocalStorage = localStorage.getItem('isFavoritesSelected');
-    if (
-      isFavoritesSelectedFromLocalStorage === null ||
-      isFavoritesSelectedFromLocalStorage === undefined
-    ) {
-      isFavoritesSelectedFromLocalStorage = 'false';
-    }
-    setIsFavoritesSelected(isFavoritesSelectedFromLocalStorage === 'true');
-  }, []);
+const Favorites = ({ favoritesCount }: FavoritesProps) => {
+  const router = useRouter();
 
-  const OnMouseDown = () => {
-    const newValue = !isFavoritesSelected;
-    localStorage.setItem('isFavoritesSelected', newValue ? 'true' : 'false');
-    setIsFavoritesSelected(newValue);
+  const handleClick = () => {
+    router.push('/favorites');
   };
 
   return (
-    <div onMouseDown={OnMouseDown}>
-      {isFavoritesSelected ? (
-        <Image src={heartFilled} alt={'избранное выбрано'} className={'w-8 h-8'}></Image>
-      ) : (
-        <Image src={heart} alt={'избранное не выбрано'} className={'w-8 h-8'}></Image>
+    <button
+      onClick={handleClick}
+      className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+      title="Избранное"
+    >
+      <Image src={heart} alt={'Избранное'} className={'w-6 h-6'} />
+      {favoritesCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          {favoritesCount}
+        </span>
       )}
-    </div>
+    </button>
   );
 };
 

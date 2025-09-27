@@ -19,7 +19,6 @@ const ProductImageHoverArea = ({
     );
   }
 
-  // Делим область на N частей (по количеству изображений)
   const areas = images.map((_, index) => {
     const width = 100 / images.length;
     return {

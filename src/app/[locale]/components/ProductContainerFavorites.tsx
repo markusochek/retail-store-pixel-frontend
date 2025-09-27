@@ -7,7 +7,11 @@ import { Hits } from 'meilisearch';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: string }) => {
+const ProductContainerFavorites = async ({
+  initialSearchQuery,
+}: {
+  initialSearchQuery: string;
+}) => {
   const session = await getServerSession(authOptions);
 
   let products:
@@ -44,12 +48,14 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
       },
     });
 
-    products = products.map(product => {
-      return {
-        ...product,
-        isFavorite: favorites.some(favorite => favorite.product_id === product.id),
-      };
-    });
+    products = products
+      .map(product => {
+        return {
+          ...product,
+          isFavorite: favorites.some(favorite => favorite.product_id === product.id),
+        };
+      })
+      .filter(product => product.isFavorite);
   } else {
     products = products.map(product => {
       return {
@@ -72,4 +78,4 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
   );
 };
 
-export default ProductContainer;
+export default ProductContainerFavorites;

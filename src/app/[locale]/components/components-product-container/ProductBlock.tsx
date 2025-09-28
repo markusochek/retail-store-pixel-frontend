@@ -38,10 +38,19 @@ const ProductBlock = ({
   const [isUploading, setIsUploading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const onDragOver = useCallback(
+    (e: React.DragEvent) => {
+      if (!isAdmin) return;
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    [isAdmin]
+  );
+
+  const onDragEnter = useCallback(
     (e: React.DragEvent) => {
       if (!isAdmin) return;
       e.preventDefault();
@@ -56,7 +65,12 @@ const ProductBlock = ({
       if (!isAdmin) return;
       e.preventDefault();
       e.stopPropagation();
-      setIsDragOver(false);
+
+      const { currentTarget, relatedTarget } = e;
+
+      if (!relatedTarget || !currentTarget.contains(relatedTarget as Node)) {
+        setIsDragOver(false);
+      }
     },
     [isAdmin]
   );
@@ -191,10 +205,12 @@ const ProductBlock = ({
 
   return (
     <div
+      ref={containerRef} // Добавляем ref
       className={`flex flex-col bg-white rounded-xl p-4 shadow-sm border-2 border-gray-100 hover:shadow-md hover:border-blue-100 transition-all group relative ${
         isDragOver ? 'border-blue-400 bg-blue-50 scale-105 shadow-lg' : ''
       } ${isUploading ? 'opacity-70 pointer-events-none' : ''}`}
       onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >

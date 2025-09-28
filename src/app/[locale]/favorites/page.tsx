@@ -1,4 +1,4 @@
-import ProductContainerFavorites from '@/app/[locale]/components/ProductContainerFavorites';
+import ProductContainerFavorites from '@/app/[locale]/favorites/components/ProductContainerFavorites';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;

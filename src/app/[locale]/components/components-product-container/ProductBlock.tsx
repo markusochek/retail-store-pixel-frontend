@@ -9,29 +9,36 @@ import uploadImages from '@/../public/icons/upload-icon.svg';
 import heart from '@/../public/icons/heart.svg';
 import heartFilled from '@/../public/icons/heart-filled.svg';
 import Image from 'next/image';
+import { useFavoritesStore } from '@/stores/useFavoritesStore';
 
 const ProductBlock = ({
   id,
   name,
   salePrice,
   quantity,
-  isAdmin,
   images,
   isFavoriteInitialization,
+  isEntrance,
+  isAdmin,
 }: {
   id: number;
   name: string;
   salePrice: number;
   quantity: number;
-  isAdmin: boolean;
   images: { id: number; path_to_image: string; product_id: number }[];
   isFavoriteInitialization: boolean;
+  isEntrance: boolean;
+  isAdmin: boolean;
 }) => {
+  const { increment, decrement } = useFavoritesStore();
+
   const [displayedImages, setDisplayedImages] = useState(images);
   const [isFavorite, setIsFavorite] = useState(isFavoriteInitialization);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const router = useRouter();
 
   const onDragOver = useCallback(
@@ -134,15 +141,19 @@ const ProductBlock = ({
     try {
       const productId = id;
 
-      if (isFavorite) {
+      if (isEntrance && isFavorite) {
         const response = await fetch(`/api/favorites/${productId}`, {
           method: 'DELETE',
         });
 
         if (!response.ok) {
           throw new Error('Failed to remove from favorites');
+        } else {
+          decrement();
         }
-      } else {
+      }
+
+      if (isEntrance && !isFavorite) {
         const response = await fetch('/api/favorites', {
           method: 'POST',
           headers: {
@@ -153,7 +164,29 @@ const ProductBlock = ({
 
         if (!response.ok) {
           throw new Error('Failed to add to favorites');
+        } else {
+          increment();
         }
+      }
+
+      if (!isEntrance && isFavorite) {
+        const favoritesFromStorage = localStorage.getItem('favorites');
+        if (favoritesFromStorage) {
+          let favorites: number[] = JSON.parse(favoritesFromStorage);
+          favorites = favorites.filter(favorite => favorite !== productId);
+          localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        decrement();
+      }
+
+      if (!isEntrance && !isFavorite) {
+        const favoritesFromStorage = localStorage.getItem('favorites');
+        if (favoritesFromStorage) {
+          const favorites = JSON.parse(favoritesFromStorage);
+          favorites.push(productId);
+          localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        increment();
       }
 
       setIsFavorite(!isFavorite);
@@ -172,7 +205,7 @@ const ProductBlock = ({
       onDrop={onDrop}
     >
       <button
-        className="absolute top-3 right-3 z-10 p-1 bg-white rounded-full shadow-md hover:scale-110 transition-transform"
+        className="absolute top-3 right-3 z-10 p-1 bg-white rounded-full shadow-md hover:scale-110 transition-transform cursor-pointer"
         onClick={handleFavoriteClick}
         title={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
       >

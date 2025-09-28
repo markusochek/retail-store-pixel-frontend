@@ -48,14 +48,12 @@ const ProductContainerFavorites = async ({
       },
     });
 
-    products = products
-      .map(product => {
-        return {
-          ...product,
-          isFavorite: favorites.some(favorite => favorite.product_id === product.id),
-        };
-      })
-      .filter(product => product.isFavorite);
+    products = products.map(product => {
+      return {
+        ...product,
+        isFavorite: favorites.some(favorite => favorite.product_id === product.id),
+      };
+    });
   } else {
     products = products.map(product => {
       return {
@@ -64,17 +62,35 @@ const ProductContainerFavorites = async ({
       };
     });
   }
+  products = products.filter(product => product.isFavorite);
 
   products = products.map(product => {
     return { ...product, sale_price: parseFloat(product.sale_price.toString()) };
   });
   products.sort((a, b) => Number(a.id - b.id));
 
-  return (
-    <ProductContainerClient
-      isAdmin={session ? session.user.role === 'ADMIN' : false}
-      products={products}
-    ></ProductContainerClient>
+  return products.length > 0 ? (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Избранное</h1>
+          <ProductContainerClient
+            isEntrance={!!session}
+            isAdmin={session ? session.user.role === 'ADMIN' : false}
+            products={products}
+          ></ProductContainerClient>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Избранное</h1>
+          <p className="text-gray-600">У вас пока нет избранных товаров</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

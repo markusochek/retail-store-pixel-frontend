@@ -66,6 +66,7 @@ const ProductContainer = async ({ initialSearchQuery }: { initialSearchQuery: st
 
   return (
     <ProductContainerClient
+      isEntrance={!!session}
       isAdmin={session ? session.user.role === 'ADMIN' : false}
       products={products}
     ></ProductContainerClient>

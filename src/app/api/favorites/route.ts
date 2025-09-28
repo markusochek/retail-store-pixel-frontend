@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingFavorite) {
-      return NextResponse.json({ message: 'Товар уже в избранном' });
+      return NextResponse.json({ message: 'Товар уже в избранном' }, { status: 409 });
     }
 
     const favorite = await prisma.favorites.create({

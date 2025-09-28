@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import magnifier from '@/../public/icons/magnifier.svg';
+import magnifier from '../../../../public/icons/magnifier.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 

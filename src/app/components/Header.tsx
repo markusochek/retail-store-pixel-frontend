@@ -1,12 +1,11 @@
 import React from 'react';
-import Image from 'next/image';
-import logo from '../../../public/icons/logo.svg';
-import SearchBar from '@/app/[locale]/components/components-header/SearchBar';
-import UserMenu from '@/app/[locale]/components/components-header/UserMenu';
-import Favorites from '@/app/[locale]/components/components-header/Favorites';
+import SearchBar from '@/app/components/components-header/SearchBar';
+import UserMenu from '@/app/components/components-header/UserMenu';
+import Favorites from '@/app/components/components-header/Favorites';
 import { prisma } from '@/lib/db/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import Logo from '@/app/components/components-header/Logo';
 
 const Header = async () => {
   const session = await getServerSession(authOptions);
@@ -22,9 +21,9 @@ const Header = async () => {
 
   return (
     <header className="bg-white flex justify-between items-center rounded-2xl p-4 shadow-sm border border-gray-100 mx-4 mt-4">
-      <Image src={logo} alt="Logo" className="ml-5" />
+      <Logo />
       <SearchBar />
-      <Favorites favoritesCount={favorites.length} />
+      <Favorites serverCount={favorites.length} />
       <UserMenu />
     </header>
   );

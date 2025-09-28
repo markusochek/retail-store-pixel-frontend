@@ -34,14 +34,13 @@ const ProductImageGallery = ({ images }: { images: { path_to_image: string }[] }
 
   return (
     <div className="w-full flex gap-4 items-start">
-      {/* Миниатюры слева */}
       {images.length > 1 && (
         <div className="flex flex-col gap-2">
           {images.map((image, index) => (
             <button
               key={index}
               onClick={() => onThumbnailClick(index)}
-              className={`relative w-12 h-12 rounded border-2 transition-all ${
+              className={`relative w-12 h-12 rounded border-2 transition-all  cursor-pointer ${
                 index === selectedIndex
                   ? 'border-blue-500 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
@@ -52,6 +51,7 @@ const ProductImageGallery = ({ images }: { images: { path_to_image: string }[] }
                 src={'/uploads/images/' + image.path_to_image}
                 alt={`Thumbnail ${index + 1}`}
                 fill
+                sizes="48px"
                 className="object-cover rounded"
               />
             </button>
@@ -59,7 +59,6 @@ const ProductImageGallery = ({ images }: { images: { path_to_image: string }[] }
         </div>
       )}
 
-      {/* Основной слайдер справа */}
       <div className="flex-1 overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {images.map((image, index) => (
@@ -69,7 +68,11 @@ const ProductImageGallery = ({ images }: { images: { path_to_image: string }[] }
                   src={'/uploads/images/' + image.path_to_image}
                   alt={`Product image ${index + 1}`}
                   fill
+                  sizes="(max-width: 640px) 90vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, 500px"
                   className="object-cover rounded"
+                  priority={index === 0}
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,..."
                 />
               </div>
             </div>

@@ -122,12 +122,6 @@ const ProductBlock = ({
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
-    if (isAdmin && e.button === 0 && e.ctrlKey) {
-      e.preventDefault();
-      fileInputRef.current?.click();
-      return;
-    }
-
     if (e.button === 0) {
       e.preventDefault();
       router.push(`/products/${id}`);

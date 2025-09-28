@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import logo from '../../../public/icons/logo.svg';
+import logoWhite from '../../../public/icons/logo-white.svg';
 
 const Footer = () => {
   return (
@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Лого и описание */}
           <div className="flex flex-col items-center md:items-start">
-            <Image src={logo} alt="Pixel" className={'w-60 h-16'} />
+            <Image src={logoWhite} alt="Pixel" className={'w-60 h-16'} />
             <p className="mt-4 text-gray-400 text-sm text-center md:text-left">
               Интернет-магазин игрушек и канцтоваров
             </p>

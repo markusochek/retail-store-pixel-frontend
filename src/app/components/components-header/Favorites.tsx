@@ -25,7 +25,7 @@ const Favorites = ({ serverCount }: FavoritesProps) => {
         setCount(favorites.length);
       }
     }
-  }, [count, serverCount, setCount]);
+  }, [serverCount, setCount]);
 
   const handleClick = () => {
     router.push('/favorites');

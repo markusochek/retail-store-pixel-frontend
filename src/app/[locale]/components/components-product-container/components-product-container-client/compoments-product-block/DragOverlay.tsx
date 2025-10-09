@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import uploadImages from '@/../public/icons/upload-icon.svg';
+import uploadImages from '../../../../../../../public/icons/upload-icon.svg';
 
 interface DragOverlayProps {
   isDragOver: boolean;

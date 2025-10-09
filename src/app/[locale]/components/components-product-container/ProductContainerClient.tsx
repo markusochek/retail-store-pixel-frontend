@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ProductBlock from '@/app/[locale]/components/components-product-container/ProductBlock';
+import ProductBlock from '@/app/[locale]/components/components-product-container/components-product-container-client/ProductBlock';
 import { Decimal } from '@prisma/client/runtime/library';
 import { Hits } from 'meilisearch';
 

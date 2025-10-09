@@ -4,11 +4,11 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
-import FavoriteButton from '@/app/[locale]/components/components-product-container/compoments-product-block/FavoriteButton';
-import DragOverlay from '@/app/[locale]/components/components-product-container/compoments-product-block/DragOverlay';
-import ProductImageHoverArea from '@/app/[locale]/components/components-product-container/compoments-product-block/ProductImageHoverArea';
-import FileUploadInput from '@/app/[locale]/components/components-product-container/compoments-product-block/FileUploadInput';
-import ProductInfo from '@/app/[locale]/components/components-product-container/compoments-product-block/ProductsInfo';
+import FavoriteButton from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/FavoriteButton';
+import DragOverlay from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/DragOverlay';
+import ProductImageHoverArea from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/ProductImageHoverArea';
+import FileUploadInput from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/FileUploadInput';
+import ProductInfo from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/ProductsInfo';
 
 interface ProductBlockProps {
   id: number;

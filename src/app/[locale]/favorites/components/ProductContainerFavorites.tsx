@@ -1,7 +1,7 @@
 import React from 'react';
 import { productsIndexAdmin } from '@/lib/meilisearch';
 import { prisma } from '@/lib/db/prisma';
-import ProductContainerClient from '@/app/[locale]/components/ProductContainerClient';
+import ProductContainerClient from '@/app/[locale]/components/components-product-container/ProductContainerClient';
 import { Decimal } from '@prisma/client/runtime/library';
 import { Hits } from 'meilisearch';
 import { getServerSession } from 'next-auth/next';

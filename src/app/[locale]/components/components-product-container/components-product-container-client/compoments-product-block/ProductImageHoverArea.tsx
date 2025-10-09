@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import thereIsNoPicture from '@/../public/icons/there-is-no-picture.png';
+import thereIsNoPicture from '../../../../../../../public/icons/there-is-no-picture.png';
 
 const ProductImageHoverArea = ({
   images,

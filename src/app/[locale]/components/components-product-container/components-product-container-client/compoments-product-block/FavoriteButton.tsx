@@ -3,8 +3,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import heart from '@/../public/icons/heart.svg';
-import heartFilled from '@/../public/icons/heart-filled.svg';
+import heart from '../../../../../../../public/icons/heart.svg';
+import heartFilled from '../../../../../../../public/icons/heart-filled.svg';
 import { useFavorites } from '@/hooks/useFavorites';
 
 interface FavoriteButtonProps {

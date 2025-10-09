@@ -13,20 +13,20 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
   //   const products = parseProductsFile('products');
   //   for (const product of products) {
   //     const exists = await prisma.products.findUnique({
-  //       where: { id_from_another_db: product.id_from_another_db },
+  //       where: { id: product.id },
   //     });
   //     if (!exists) {
   //       await prisma.products.create({
   //         data: {
   //           sale_price: product.sale_price,
   //           name: product.name,
-  //           id_from_another_db: product.id_from_another_db,
+  //           id: product.id,
   //           quantity: product.quantity,
   //         },
   //       });
   //     }
   //   }
-  // }, 100000);
+  // }, 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

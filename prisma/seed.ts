@@ -1,8 +1,86 @@
+// prisma/seed.ts
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+interface SeedConfig {
+  adminEmail: string;
+  adminPassword: string;
+}
+
+function getSeedConfig(): SeedConfig {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error(
+      '❌ ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env file for seeding\n' +
+        'Example:\n' +
+        'ADMIN_EMAIL=admin@example.com\n' +
+        'ADMIN_PASSWORD=YourSecurePassword123'
+    );
+  }
+
+  // Базовая валидация email
+  if (!adminEmail.includes('@')) {
+    throw new Error('❌ ADMIN_EMAIL must be a valid email address');
+  }
+
+  // Валидация пароля
+  if (adminPassword.length < 8) {
+    throw new Error('❌ ADMIN_PASSWORD must be at least 8 characters long');
+  }
+
+  return {
+    adminEmail,
+    adminPassword,
+  };
+}
+
+async function createAdminUser(email: string, password: string) {
+  // Проверяем, не существует ли уже пользователь
+  const existingUser = await prisma.users.findUnique({
+    where: { email },
+  });
+
+  if (existingUser) {
+    console.log('ℹ️ Admin user already exists, updating password...');
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    await prisma.users.update({
+      where: { email },
+      data: {
+        password: Buffer.from(hashedPassword),
+        role_id: 1,
+      },
+    });
+
+    return 'updated';
+  } else {
+    // Создаем нового пользователя
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await prisma.users.create({
+      data: {
+        email,
+        password: Buffer.from(hashedPassword),
+        role_id: 1,
+      },
+    });
+
+    return 'created';
+  }
+}
+
 async function main() {
+  console.log('🌱 Starting database seed...');
+
+  // Получаем конфигурацию
+  const config = getSeedConfig();
+
+  // Создаем роли
+  console.log('👥 Creating roles...');
   const roles = [
     { id: 1, name: 'ADMIN' },
     { id: 2, name: 'USER' },
@@ -16,6 +94,8 @@ async function main() {
     });
   }
 
+  // Создаем категории
+  console.log('📦 Creating categories...');
   const categories = [
     { id: 1, name: 'toys' },
     { id: 2, name: 'stationery' },
@@ -29,12 +109,19 @@ async function main() {
     });
   }
 
-  console.log('Seed data created successfully');
+  // Создаем администратора
+  console.log('👑 Creating admin user...');
+  const action = await createAdminUser(config.adminEmail, config.adminPassword);
+
+  console.log(`✅ Admin user ${action} successfully`);
+  console.log(`📧 Email: ${config.adminEmail}`);
+  console.log('🔑 Password: (from .env file)');
+  console.log('🎉 Database seed completed successfully!');
 }
 
 main()
   .catch(error => {
-    console.error(error);
+    console.error('❌ Seed failed:', error.message);
     process.exit(1);
   })
   .finally(async () => {

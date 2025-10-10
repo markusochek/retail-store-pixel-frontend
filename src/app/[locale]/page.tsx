@@ -1,13 +1,12 @@
+// app/page.tsx
 import ProductContainer from '@/app/[locale]/components/ProductContainer';
-import { configureMeilisearch, syncProductsToMeilisearch } from '@/lib/syncProducts';
+import { triggerSyncIfNeeded } from '@/lib/syncProducts/trigger';
 
 export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams;
-
   const initialSearchQuery = searchParams.q || '';
 
-  await syncProductsToMeilisearch();
-  await configureMeilisearch();
+  await triggerSyncIfNeeded();
 
   // const syncProducts = setInterval(async () => {
   //   const products = parseProductsFile('products');
@@ -26,6 +25,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string }
   //       });
   //     }
   //   }
+
   // }, 0);
 
   return (

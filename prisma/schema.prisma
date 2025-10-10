@@ -26,9 +26,9 @@ model users {
 }
 
 model products {
+  id          Int         @id(map: "products_pk") @default(autoincrement())
   sale_price  Decimal     @db.Decimal(10, 2)
   name        String      @db.VarChar(255)
-  id          Int         @id(map: "products_pk") @default(autoincrement())
   description String?
   category_id Int         @default(1)
   quantity    Int

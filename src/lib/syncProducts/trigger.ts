@@ -7,11 +7,11 @@ export async function triggerSyncIfNeeded() {
   try {
     let lastSync;
     try {
-      lastSync = await prisma.syncMetadata.findUnique({
+      lastSync = await prisma.synchronization_metadata.findUnique({
         where: { key: 'last_meilisearch_sync' },
       });
     } catch (error) {
-      console.log('SyncMetadata table might not be ready yet');
+      console.log('synchronization_metadata table might not be ready yet');
       lastSync = null;
     }
 
@@ -30,7 +30,7 @@ export async function triggerSyncIfNeeded() {
 
       // 3. Сохраняем время синхронизации
       try {
-        await prisma.syncMetadata.upsert({
+        await prisma.synchronization_metadata.upsert({
           where: { key: 'last_meilisearch_sync' },
           update: { value: new Date().toISOString() },
           create: {

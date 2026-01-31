@@ -2,12 +2,18 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import ProductImageGallery from '@/app/[locale]/products/[id]/components/ProductImageGallery';
 import loggerServer from '@/lib/logger/logger-server';
+import React from 'react';
+import AddToCartButton from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/AddToCartButton';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function ProductPage({ params }: PageProps) {
+  const session = await getServerSession(authOptions);
+
   const { id } = await params;
   const productId = id;
   let product;
@@ -45,11 +51,11 @@ export default async function ProductPage({ params }: PageProps) {
               {product.sale_price.toString()}₽
             </div>
             {product.quantity > 0 ? (
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                В наличии
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                {product.quantity} шт
               </span>
             ) : (
-              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+              <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">
                 Нет в наличии
               </span>
             )}
@@ -69,6 +75,13 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="text-gray-700 leading-relaxed">{product.description}</p>
             </div>
           )}
+
+          <AddToCartButton
+            productId={product.id}
+            isEntrance={!!session}
+            maxQuantity={product.quantity}
+            className="mt-auto"
+          />
         </div>
       </div>
     </div>

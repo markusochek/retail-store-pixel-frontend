@@ -9,6 +9,7 @@ import DragOverlay from '@/app/[locale]/components/components-product-container/
 import ProductImageHoverArea from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/ProductImageHoverArea';
 import FileUploadInput from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/FileUploadInput';
 import ProductInfo from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/ProductsInfo';
+import AddToCartButton from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/AddToCartButton';
 
 interface ProductBlockProps {
   id: number;
@@ -91,13 +92,22 @@ const ProductBlock = ({
         <FileUploadInput fileInputRef={fileInputRef} />
       </div>
 
-      <ProductInfo
-        onMouseDown={handleProductClick}
-        name={name}
-        quantity={quantity}
-        salePrice={salePrice}
-        id={id}
-      />
+      <div className="flex flex-col flex-grow">
+        <ProductInfo
+          onMouseDown={handleProductClick}
+          name={name}
+          quantity={quantity}
+          salePrice={salePrice}
+          id={id}
+        />
+
+        <AddToCartButton
+          productId={id}
+          isEntrance={isEntrance}
+          maxQuantity={quantity}
+          className="mt-auto"
+        />
+      </div>
     </div>
   );
 };

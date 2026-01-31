@@ -109,6 +109,25 @@ async function main() {
     });
   }
 
+  // Создаем статусы заказов
+  console.log('📦 Creating orders status...');
+  const order_statuses = [
+    { id: 1, name: 'pending' },
+    { id: 2, name: 'confirmed' },
+    { id: 3, name: 'assembling' },
+    { id: 4, name: 'ready' },
+    { id: 5, name: 'completed' },
+    { id: 6, name: 'cancelled' },
+  ];
+
+  for (const orderStatus of order_statuses) {
+    await prisma.order_statuses.upsert({
+      where: { id: orderStatus.id },
+      update: orderStatus,
+      create: orderStatus,
+    });
+  }
+
   // Создаем администратора
   console.log('👑 Creating admin user...');
   const action = await createAdminUser(config.adminEmail, config.adminPassword);

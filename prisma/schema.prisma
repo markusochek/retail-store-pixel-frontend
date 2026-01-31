@@ -7,34 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SyncMetadata {
-  key       String   @id
-  value     String
-  updatedAt DateTime @updatedAt
+model synchronization_metadata {
+  key        String   @id
+  value      String
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model users {
-  id            Int         @id(map: "users_pk") @default(autoincrement())
-  email         String      @unique(map: "users_unique_email") @db.VarChar(255)
+  id            Int          @id(map: "users_pk") @default(autoincrement())
+  email         String       @unique(map: "users_unique_email") @db.VarChar(255)
   password      Bytes
-  role_id       Int         @default(2)
-  refresh_token String?     @db.VarChar(255)
-  created_at    DateTime    @default(now()) @db.Date
-  updated_at    DateTime    @default(now()) @db.Date
+  role_id       Int          @default(2)
+  refresh_token String?      @db.VarChar(255)
+  created_at    DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime     @default(now()) @db.Timestamptz(6)
+  cart_items    cart_items[]
   favorites     favorites[]
-  roles         roles       @relation(fields: [role_id], references: [id], onUpdate: Restrict, map: "users_roles_fk")
+  roles         roles        @relation(fields: [role_id], references: [id], onUpdate: Restrict, map: "users_roles_fk")
+  orders        orders[]
 }
 
 model products {
-  id          Int         @id(map: "products_pk") @default(autoincrement())
-  sale_price  Decimal     @db.Decimal(10, 2)
-  name        String      @db.VarChar(255)
+  id          Int           @id(map: "products_pk") @default(autoincrement())
+  sale_price  Decimal       @db.Decimal(10, 2)
+  name        String        @db.VarChar(255)
   description String?
-  category_id Int         @default(1)
+  category_id Int           @default(1)
   quantity    Int
+  created_at  DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime      @default(now()) @db.Timestamptz(6)
+  cart_items  cart_items[]
   favorites   favorites[]
   images      images[]
-  categories  categories  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_categories_fk")
+  categories  categories    @relation(fields: [category_id], references: [id], onUpdate: Restrict, map: "products_categories_fk")
+  order_items order_items[]
 }
 
 model roles {
@@ -47,6 +53,8 @@ model images {
   id            Int      @id(map: "images_pk") @default(autoincrement())
   path_to_image String   @db.VarChar(255)
   product_id    Int
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
   products      products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "images_products_fk")
 }
 
@@ -60,8 +68,68 @@ model favorites {
   id         Int      @id @default(autoincrement())
   user_id    Int
   product_id Int
-  products   products @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorites_products_fk")
-  users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorites_users_fk")
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "favorites_products_fk")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "favorites_users_fk")
 
   @@unique([user_id, product_id], map: "favorites_unique_user_id_product_id")
+}
+
+model orders {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  order_status_id Int       @default(1)
+  order_number    String    @unique @db.VarChar(50)
+  total_amount    Decimal   @db.Decimal(10, 2)
+  customer_name   String?   @db.VarChar(255)
+  customer_phone  String?   @db.VarChar(50)
+  customer_email  String?   @db.VarChar(255)
+  pickup_code     String?   @db.VarChar(10) // Код для получения заказа
+  notes           String?   @db.Text
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @default(now()) @db.Timestamptz(6)
+  assembled_at    DateTime?
+  ready_at        DateTime?
+  completed_at    DateTime?
+
+  users          users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  order_statuses order_statuses @relation(fields: [order_status_id], references: [id], onUpdate: Restrict, map: "order_statuses_fk")
+  order_items    order_items[]
+
+  @@index([user_id])
+  @@index([order_status_id])
+  @@index([order_number])
+}
+
+model order_statuses {
+  id     Int      @id(map: "orders_pk") @default(autoincrement())
+  name   String   @db.VarChar(63)
+  orders orders[]
+}
+
+model order_items {
+  id         Int      @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int      @default(1)
+  price      Decimal  @db.Decimal(10, 2) // Цена на момент заказа
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  orders   orders   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  products products @relation(fields: [product_id], references: [id])
+
+  @@unique([order_id, product_id])
+}
+
+model cart_items {
+  id         Int      @id(map: "cart_items_pk") @default(autoincrement())
+  user_id    Int
+  product_id Int
+  quantity   Int      @default(1)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "cart_items_products_fk")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "cart_items_users_fk")
+
+  @@unique([user_id, product_id], map: "cart_items_unique_user_id_product_id")
 }

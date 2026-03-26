@@ -14,7 +14,7 @@ const ProductImageHoverArea = ({
   if (!images || images.length === 0) {
     return (
       <div className="relative aspect-[3/4] rounded-lg flex items-center justify-center  cursor-pointer">
-        <Image src={thereIsNoPicture} alt={'Нет изображения'}></Image>
+        <Image src={thereIsNoPicture} alt={'Нет изображения'} className="object-contain"></Image>
       </div>
     );
   }
@@ -30,13 +30,13 @@ const ProductImageHoverArea = ({
 
   return (
     <div className="relative w-full">
-      <div className="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+      <div className="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
         <div className="relative w-full h-full cursor-pointer">
           <Image
             src={'/uploads/images/' + images[currentImageIndex].path_to_image}
             alt={`Product image ${currentImageIndex + 1}`}
             fill
-            className="object-cover"
+            className="object-contain"
             sizes="(max-width: 768px) 100vw, 400px"
             priority={currentImageIndex <= 10}
           />

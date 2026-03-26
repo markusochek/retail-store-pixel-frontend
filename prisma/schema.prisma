@@ -36,6 +36,8 @@ model products {
   quantity    Int
   created_at  DateTime      @default(now()) @db.Timestamptz(6)
   updated_at  DateTime      @default(now()) @db.Timestamptz(6)
+  vk_tags     String?       @db.VarChar(255)
+  vk_url      String?       @unique @db.VarChar(255)
   cart_items  cart_items[]
   favorites   favorites[]
   images      images[]

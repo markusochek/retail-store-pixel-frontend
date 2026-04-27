@@ -7,7 +7,7 @@ import https from 'https';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const vk = new VK({ token: process.env.VK_TOKEN });
+const vk = new VK({ token: process.env.VK_TOKEN! });
 
 const IMAGES_DIR = path.join(process.cwd(), 'public', 'uploads', 'images');
 fs.mkdirSync(IMAGES_DIR, { recursive: true });
@@ -29,48 +29,44 @@ const http = axios.create({
 /**
  * 🔥 Рандом
  */
-function randomPrice(tag) {
+function randomPrice(tag: string): number {
   if (tag === 'toys') return Math.floor(Math.random() * 3000 + 500);
   if (tag === 'officesupplies') return Math.floor(Math.random() * 500 + 50);
   return Math.floor(Math.random() * 1000 + 100);
 }
 
-function randomQuantity() {
+function randomQuantity(): number {
   return Math.floor(Math.random() * 20) + 1;
 }
 
 /**
  * 🔥 Категории
  */
-function mapCategory(tag) {
+function mapCategory(tag: string): number {
   return tag === 'officesupplies' ? 2 : 1;
 }
 
 /**
  * 🔥 Парсинг текста
  */
-function fixUnicode(str) {
+function fixUnicode(str: string): string {
   if (!str) return '';
 
-  return (
-    str
-      // убираем битые surrogate пары
-      .replace(/[\uD800-\uDFFF]/g, '')
-      // убираем невидимые символы
-      .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
-      .trim()
-  );
+  return str
+    .replace(/[\uD800-\uDFFF]/g, '')
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+    .trim();
 }
 
-function cleanText(text) {
+function cleanText(text: string): string {
   return text
-    .replace(/[⚡🔥❗✨💖😍🎄😈🦄💞🎉🎊👇]+/g, '') // эмодзи
+    .replace(/[⚡🔥❗✨💖😍🎄😈🦄💞🎉🎊👇]+/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
-function isTrashLine(line) {
-  const trashPatterns = [
+function isTrashLine(line: string): boolean {
+  const trashPatterns: RegExp[] = [
     /^новинки?$/i,
     /^новое поступление$/i,
     /^снова в наличии$/i,
@@ -88,10 +84,9 @@ function isTrashLine(line) {
   return cleaned.length < 4 || trashPatterns.some(p => p.test(cleaned));
 }
 
-function normalizeTitle(line) {
+function normalizeTitle(line: string): string {
   let text = cleanText(line);
 
-  // убираем слова внутри строки
   text = text
     .replace(/новинки?/gi, '')
     .replace(/снова в наличии/gi, '')
@@ -104,12 +99,11 @@ function normalizeTitle(line) {
   return text;
 }
 
-function parseVKPost(text) {
+function parseVKPost(text: string): { title: string; description: string; tags: string[] } {
   const lines = text.split('\n');
 
   const tags = text.match(/#([a-zA-Z0-9_-]+)/g)?.map(t => t.replace('#', '')) || [];
 
-  // убираем хештеги и пустые строки
   const contentLines = lines.map(line => line.trim()).filter(line => line && !line.startsWith('#'));
 
   let title = 'Без названия';
@@ -133,17 +127,16 @@ function parseVKPost(text) {
 /**
  * 🔥 Скачивание с retry
  */
-async function downloadImage(url, retries = 3) {
+async function downloadImage(url: string, retries = 3): Promise<string | null> {
   try {
     const safeUrl = encodeURI(url);
-    const pathname = new URL(safeUrl).pathname;
+    const { pathname } = new URL(safeUrl);
     const filename = path.basename(pathname);
 
     const filepath = path.join(IMAGES_DIR, filename);
 
-    // если уже есть — не качаем
     if (fs.existsSync(filepath)) {
-      return `${filename}`;
+      return filename;
     }
 
     const response = await http.get(safeUrl, {
@@ -153,13 +146,13 @@ async function downloadImage(url, retries = 3) {
     const writer = fs.createWriteStream(filepath);
     response.data.pipe(writer);
 
-    await new Promise((res, rej) => {
-      writer.on('finish', res);
-      writer.on('error', rej);
+    await new Promise<void>((resolve, reject) => {
+      writer.on('finish', resolve);
+      writer.on('error', reject);
     });
 
-    return `${filename}`;
-  } catch (err) {
+    return filename;
+  } catch (err: any) {
     if (retries > 0) {
       console.log('retry...', url);
       await new Promise(r => setTimeout(r, 1000));
@@ -174,8 +167,8 @@ async function downloadImage(url, retries = 3) {
 /**
  * 🔥 Основной парсер
  */
-async function syncVKGroupPosts() {
-  const owner_id = -Number(process.env.VK_GROUP_ID);
+async function syncVKGroupPosts(): Promise<void> {
+  const owner_id = -Number(process.env.VK_GROUP_ID!);
 
   let offset = 0;
   const count = 100;
@@ -198,7 +191,7 @@ async function syncVKGroupPosts() {
     console.log(`👉 Загружаю ${offset} - ${offset + posts.length}`);
 
     for (const item of posts) {
-      await processPost(item); // вынеси свою логику сюда
+      await processPost(item);
     }
 
     offset += count;
@@ -207,14 +200,14 @@ async function syncVKGroupPosts() {
   console.log('🚀 ВСЕ посты синхронизированы');
 }
 
-async function processPost(item) {
+async function processPost(item: any): Promise<void> {
   const { title, description, tags } = parseVKPost(item.text);
 
   const mainTag = tags.find(t => ['toys', 'officesupplies'].includes(t)) || 'toys';
 
   const category_id = mapCategory(mainTag);
 
-  const vk_url = `https://vk.com/wall-${process.env.VK_GROUP_ID}_${item.id}`;
+  const vk_url = `https://vk.com/wall-${process.env.VK_GROUP_ID!}_${item.id}`;
 
   const cleanTitle = fixUnicode(title);
   const cleanDescription = fixUnicode(description);
@@ -245,7 +238,7 @@ async function processPost(item) {
   for (const attach of item.attachments) {
     if (attach.type !== 'photo') continue;
 
-    const largest = attach.photo.sizes.reduce((a, b) => (a.width > b.width ? a : b));
+    const largest = attach.photo.sizes.reduce((a: any, b: any) => (a.width > b.width ? a : b));
 
     const localPath = await downloadImage(largest.url);
     if (!localPath) continue;
@@ -278,4 +271,5 @@ syncVKGroupPosts()
   .catch(err => {
     console.error(err);
     prisma.$disconnect();
+    process.exit(1);
   });

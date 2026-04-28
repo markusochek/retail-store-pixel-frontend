@@ -17,7 +17,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen bg-gray-100">
         <NextAuthProvider session={session}>
           <Header />
           <main className="flex-grow">{children}</main>

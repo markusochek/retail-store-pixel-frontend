@@ -2,9 +2,8 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import basket from '../../../../public/icons/basket.svg';
 import { useBasketStore } from '@/stores/useBasketStore';
+import { ShoppingBasket } from 'lucide-react';
 
 interface BasketProps {
   serverCount: number;
@@ -40,7 +39,7 @@ const Basket = ({ serverCount }: BasketProps) => {
       className="relative p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
       title="Корзина"
     >
-      <Image src={basket} alt={'Товары'} className={'w-6 h-6'} />
+      <ShoppingBasket className={'w-8 h-8'} />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
           {count}

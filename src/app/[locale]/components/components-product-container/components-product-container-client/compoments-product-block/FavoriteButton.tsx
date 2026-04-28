@@ -2,10 +2,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import heart from '../../../../../../../public/icons/heart.svg';
-import heartFilled from '../../../../../../../public/icons/heart-filled.svg';
 import { useFavorites } from '@/hooks/useFavorites';
+import { Heart } from 'lucide-react';
 
 interface FavoriteButtonProps {
   productId: number;
@@ -30,11 +28,11 @@ const FavoriteButton = ({
       onClick={toggleFavorite}
       title={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
     >
-      <Image
-        src={isFavorite ? heartFilled : heart}
-        alt={isFavorite ? 'В избранном' : 'Добавить в избранное'}
-        className="w-6 h-6"
-      />
+      {isFavorite ? (
+        <Heart className="w-7 h-7 text-red-500 fill-red-500" />
+      ) : (
+        <Heart className="w-7 h-7" />
+      )}
     </button>
   );
 };

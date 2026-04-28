@@ -2,8 +2,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import uploadImages from '../../../../../../../public/icons/upload-icon.svg';
+import { CloudUpload } from 'lucide-react';
 
 interface DragOverlayProps {
   isDragOver: boolean;
@@ -23,7 +22,7 @@ const DragOverlay = ({ isDragOver, isUploading }: DragOverlayProps) => {
     return (
       <div className="absolute inset-0 bg-blue-100 bg-opacity-50 border-2 border-dashed border-blue-400 rounded-xl flex items-center justify-center z-20">
         <div className="text-center">
-          <Image src={uploadImages} alt="" className="w-12 h-12 mx-auto mb-2" />
+          <CloudUpload className="w-12 h-12 mx-auto mb-2" />
           <p className="text-blue-600 font-medium">Отпустите чтобы загрузить</p>
         </div>
       </div>

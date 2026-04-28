@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import pictureOfAManOnAuthorization from '../../../../public/icons/picture-of-a-man-on-authorization.png';
-import simpleUser from '../../../../public/icons/simple-user.png';
 import AuthModal from '@/app/components/components-header/components-user-menu/AuthModal';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { UserRound } from 'lucide-react';
+import Image from 'next/image';
 
 const UserMenu = () => {
   const { data: session } = useSession();
@@ -42,13 +42,14 @@ const UserMenu = () => {
       <div className="relative">
         <button
           onClick={handleAvatarClick}
-          className="p-1 rounded-full hover:bg-gray-100 transition-colors mr-5"
+          className="cursor-pointer p-2 rounded-full hover:bg-gray-100 transition-colors"
+          title="Профиль"
         >
-          <Image
-            src={session ? pictureOfAManOnAuthorization : simpleUser}
-            alt="User avatar"
-            className="cursor-pointer w-8 h-8"
-          />
+          {session ? (
+            <Image src={pictureOfAManOnAuthorization} alt="User avatar" className="w-8 h-8" />
+          ) : (
+            <UserRound className="w-8 h-8" />
+          )}
         </button>
 
         {showLogoutHint && (

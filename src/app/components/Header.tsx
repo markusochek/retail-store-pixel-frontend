@@ -2,39 +2,44 @@ import React from 'react';
 import SearchBar from '@/app/components/components-header/SearchBar';
 import UserMenu from '@/app/components/components-header/UserMenu';
 import Favorites from '@/app/components/components-header/Favorites';
+import Basket from '@/app/components/components-header/Basket';
+import Logo from '@/app/components/components-header/Logo';
 import { prisma } from '@/lib/db/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Logo from '@/app/components/components-header/Logo';
-import Basket from '@/app/components/components-header/Basket';
+import Orders from '@/app/components/components-header/Orders';
 
 const Header = async () => {
   const session = await getServerSession(authOptions);
 
   let favorites = [];
   let cartItems = [];
-  if (session && session.user && session.user.id) {
+  if (session?.user?.id) {
     favorites = await prisma.favorites.findMany({
-      where: {
-        user_id: Number(session.user.id),
-      },
+      where: { user_id: Number(session.user.id) },
     });
-
     cartItems = await prisma.cart_items.findMany({
-      where: {
-        user_id: Number(session.user.id),
-      },
+      where: { user_id: Number(session.user.id) },
     });
   }
 
   return (
-    <header className="bg-white flex justify-between items-center rounded-2xl p-4 shadow-sm border border-gray-100 mx-4 mt-4">
-      <Logo />
-      <SearchBar />
-      <Basket serverCount={cartItems.length} />
-      <Favorites serverCount={favorites.length} />
-      <UserMenu />
-    </header>
+    <div className="sticky top-0 z-50">
+      <div className="container mx-auto max-w-[84rem] bg-white border border-gray-200 shadow-sm rounded-b-2xl px-4 py-3 flex items-center justify-between">
+        <Logo />
+
+        <div className="flex-1 mx-6 md:mx-10 min-w-0">
+          <SearchBar />
+        </div>
+
+        <div className="flex items-center gap-3 md:gap-5">
+          <UserMenu />
+          <Orders serverCount={favorites.length} />
+          <Favorites serverCount={favorites.length} />
+          <Basket serverCount={cartItems.length} />
+        </div>
+      </div>
+    </div>
   );
 };
 

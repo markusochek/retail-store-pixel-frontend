@@ -1,38 +1,22 @@
-// app/page.tsx
-import ProductContainer from '@/app/[locale]/components/ProductContainer';
+// app/[locale]/page.tsx
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import InfiniteProductList from '@/app/[locale]/components/InfiniteProductList';
 import { triggerSyncIfNeeded } from '@/lib/syncProducts/trigger';
 
-export default async function Home(props: { searchParams: Promise<{ q?: string }> }) {
-  const searchParams = await props.searchParams;
-  const initialSearchQuery = searchParams.q || '';
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
   await triggerSyncIfNeeded();
 
-  // const syncProducts = setInterval(async () => {
-  //   const products = parseProductsFile('products');
-  //   for (const product of products) {
-  //     const exists = await prisma.products.findUnique({
-  //       where: { id: product.id },
-  //     });
-  //     if (!exists) {
-  //       await prisma.products.create({
-  //         data: {
-  //           sale_price: product.sale_price,
-  //           name: product.name,
-  //           id: product.id,
-  //           quantity: product.quantity,
-  //         },
-  //       });
-  //     }
-  //   }
-
-  // }, 0);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="container mx-auto">
+    <div className="min-h-screen pt-4">
+      <div className="container max-w-[84rem] mx-auto">
         <div className="flex flex-col gap-6">
-          <ProductContainer initialSearchQuery={initialSearchQuery} />
+          <InfiniteProductList
+            isEntrance={!!session}
+            isAdmin={session?.user?.role === 'ADMIN' || false}
+          />
         </div>
       </div>
     </div>

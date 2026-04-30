@@ -7,12 +7,7 @@ import logo from '../../../../public/icons/logo.svg';
 
 const Logo = () => {
   return (
-    <Image
-      onMouseDown={() => redirect('/')}
-      src={logo}
-      alt="Logo"
-      className="ml-5 cursor-pointer"
-    />
+    <Image onMouseDown={() => redirect('/')} src={logo} alt="Logo" className="cursor-pointer" />
   );
 };
 

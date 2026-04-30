@@ -29,7 +29,7 @@ model users {
 
 model products {
   id          Int           @id(map: "products_pk") @default(autoincrement())
-  sale_price  Decimal       @db.Decimal(10, 2)
+  sale_price  Float
   name        String        @db.VarChar(255)
   description String?
   category_id Int           @default(1)
@@ -81,7 +81,7 @@ model orders {
   user_id         Int
   order_status_id Int       @default(1)
   order_number    String    @unique @db.VarChar(50)
-  total_amount    Decimal   @db.Decimal(10, 2)
+  total_amount    Float
   customer_name   String?   @db.VarChar(255)
   customer_phone  String?   @db.VarChar(50)
   customer_email  String?   @db.VarChar(255)
@@ -113,7 +113,7 @@ model order_items {
   order_id   Int
   product_id Int
   quantity   Int      @default(1)
-  price      Decimal  @db.Decimal(10, 2) // Цена на момент заказа
+  price      Float
   created_at DateTime @default(now()) @db.Timestamptz(6)
   updated_at DateTime @default(now()) @db.Timestamptz(6)
 

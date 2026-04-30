@@ -33,5 +33,16 @@ npm run dev
 ## Prisma
 
 1. npx prisma db push / npx prisma db pull
-3. npx prisma db seed
-4. npx prisma generate
+2. npx prisma db seed
+3. npx prisma generate
+
+## Docker
+
+1. docker-compose down
+2. docker-compose up -d --build
+3. docker ps
+4. docker logs pixel-nextjs
+5. set "postgresql://postgres:postgres@localhost:5432/db-name?schema=public" -> "postgresql://postgres:
+   postgres@you-docker-name-for-bd:you-docker-abandoned-port-for-bd/db-name?schema=public"
+6. npx tsx src/lib/syncProducts/syncVKGroupPosts.ts
+7. docker cp public/uploads/images/. pixel-nextjs:/app/public/uploads/images/

@@ -10,6 +10,7 @@ export async function triggerSyncIfNeeded() {
       lastSync = await prisma.synchronization_metadata.findUnique({
         where: { key: 'last_meilisearch_sync' },
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       console.log('synchronization_metadata table might not be ready yet');
       lastSync = null;
@@ -38,6 +39,7 @@ export async function triggerSyncIfNeeded() {
             value: new Date().toISOString(),
           },
         });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         console.log('Could not save sync metadata, table might not exist yet');
       }

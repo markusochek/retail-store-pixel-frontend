@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 import OrdersClient from './components/OrdersClient';
 import React from 'react';
@@ -45,6 +45,8 @@ export default async function OrdersPage() {
           },
         },
       },
+      order_statuses: true,
+      users: true,
     },
     orderBy: { created_at: 'desc' },
   });
@@ -52,7 +54,7 @@ export default async function OrdersPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Мои заказы</h1>
-      <OrdersClient initialOrders={orders} />
+      <OrdersClient initialOrders={JSON.parse(JSON.stringify(orders))} />
     </div>
   );
 }

@@ -44,7 +44,11 @@ export async function POST(request: Request) {
           }
         }
 
-        const newImages = [];
+        const newImages: {
+          id: string;
+          path_to_image: string;
+          productId: string;
+        }[] = [];
 
         for (const file of files) {
           if (!file.type.startsWith('image/')) {

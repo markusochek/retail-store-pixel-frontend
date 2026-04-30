@@ -1,6 +1,6 @@
 // app/[locale]/page.tsx
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import InfiniteProductList from '@/app/[locale]/components/InfiniteProductList';
 import { triggerSyncIfNeeded } from '@/lib/syncProducts/trigger';
 

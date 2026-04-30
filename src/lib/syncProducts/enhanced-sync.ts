@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/db/prisma';
 import { meilisearchAdminClient, productsIndexAdmin } from '@/lib/meilisearch';
 import loggerServer from '@/lib/logger/logger-server';
+import { Favorite } from '@/types/favorite';
 
 export async function syncEnhancedProductsToMeilisearch() {
   try {
@@ -9,10 +10,7 @@ export async function syncEnhancedProductsToMeilisearch() {
       include: {
         categories: true,
         images: true,
-        favorites: {
-          select: { user_id: true },
-        },
-        // orders_items нет в схеме, убираем
+        favorites: true,
       },
     });
 
@@ -27,8 +25,8 @@ export async function syncEnhancedProductsToMeilisearch() {
       quantity: product.quantity,
 
       // Новые поля для улучшения поиска
-      tags: extractTags(product.name, product.description),
-      popularity: calculatePopularity(product),
+      tags: extractTags(product.name),
+      popularity: calculatePopularity(product.favorites),
       search_boost: calculateSearchBoost(product),
 
       // Мета-данные для фильтров
@@ -63,7 +61,7 @@ export async function syncEnhancedProductsToMeilisearch() {
 }
 
 // Вспомогательные функции
-function extractTags(name: string, description: string | null): string[] {
+function extractTags(name: string): string[] {
   const tags = new Set<string>();
 
   // Извлекаем ключевые слова из названия
@@ -103,20 +101,20 @@ function extractTags(name: string, description: string | null): string[] {
   return Array.from(tags);
 }
 
-function calculatePopularity(product: any): number {
-  const favoriteCount = product.favorites.length;
+function calculatePopularity(favorites: Favorite[]): number {
+  const favoriteCount = favorites.length;
   // orders_items нет в схеме, используем только favorites
   return favoriteCount * 2;
 }
 
-function calculateSearchBoost(product: any): number {
+function calculateSearchBoost(product: { quantity: number; favorites: Favorite[] }): number {
   let boost = 1.0;
 
   // Увеличиваем вес для товаров в наличии
   if (product.quantity > 0) boost *= 1.5;
 
   // Увеличиваем вес для популярных товаров
-  const popularity = calculatePopularity(product);
+  const popularity = calculatePopularity(product.favorites);
   if (popularity > 5) boost *= 1.2;
 
   return boost;

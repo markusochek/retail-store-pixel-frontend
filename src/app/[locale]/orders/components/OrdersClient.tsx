@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Order } from '@/types/order';
 
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -22,11 +23,11 @@ const statusLabels: Record<string, string> = {
 };
 
 interface OrdersClientProps {
-  initialOrders: any[];
+  initialOrders: Order[];
 }
 
 export default function OrdersClient({ initialOrders }: OrdersClientProps) {
-  const [orders] = useState<any[]>(initialOrders);
+  const [orders] = useState<Order[]>(initialOrders);
   const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
   const router = useRouter();
 
@@ -52,8 +53,8 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
     return descriptions[status] || 'Статус неизвестен';
   };
 
-  const getOrderInstructions = (order: any) => {
-    if (order.status === 'ready') {
+  const getOrderInstructions = (order: Order) => {
+    if (order.order_statuses.name === 'ready') {
       return `Приходите в магазин по адресу: ул. Примерная, д. 10. Код получения: ${order.pickup_code}`;
     }
     return '';
@@ -109,7 +110,7 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <div className="text-2xl font-bold text-green-700">
-                  {orders.filter(o => o.status === 'completed').length}
+                  {orders.filter(o => o.order_statuses.name === 'completed').length}
                 </div>
                 <div className="text-sm text-green-600">Завершенных</div>
               </div>
@@ -117,7 +118,9 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
                 <div className="text-2xl font-bold text-yellow-700">
                   {
                     orders.filter(o =>
-                      ['pending', 'confirmed', 'assembling', 'ready'].includes(o.status)
+                      ['pending', 'confirmed', 'assembling', 'ready'].includes(
+                        o.order_statuses.name
+                      )
                     ).length
                   }
                 </div>
@@ -139,14 +142,14 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
                           Заказ №{order.order_number}
                         </h3>
                         <span
-                          className={`px-3 py-1 text-sm font-semibold rounded-full ${statusColors[order.status]}`}
+                          className={`px-3 py-1 text-sm font-semibold rounded-full ${statusColors[order.order_statuses.name]}`}
                         >
-                          {statusLabels[order.status]}
+                          {statusLabels[order.order_statuses.name]}
                         </span>
                       </div>
                       <p className="text-sm text-gray-500">{formatDate(order.created_at)}</p>
                       <p className="text-sm text-gray-600 mt-2">
-                        {getOrderStatusDescription(order.status)}
+                        {getOrderStatusDescription(order.order_statuses.name)}
                       </p>
                     </div>
 
@@ -186,19 +189,20 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
                     </button>
 
                     <div className="flex gap-3">
-                      {order.status !== 'cancelled' && order.status !== 'completed' && (
-                        <button
-                          onClick={() => {
-                            if (confirm('Вы уверены, что хотите отменить заказ?')) {
-                              // Здесь будет вызов API для отмены заказа
-                              alert('Функция отмены заказа в разработке');
-                            }
-                          }}
-                          className="text-red-600 hover:text-red-800 text-sm"
-                        >
-                          Отменить заказ
-                        </button>
-                      )}
+                      {order.order_statuses.name !== 'cancelled' &&
+                        order.order_statuses.name !== 'completed' && (
+                          <button
+                            onClick={() => {
+                              if (confirm('Вы уверены, что хотите отменить заказ?')) {
+                                // Здесь будет вызов API для отмены заказа
+                                alert('Функция отмены заказа в разработке');
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-800 text-sm"
+                          >
+                            Отменить заказ
+                          </button>
+                        )}
 
                       <button
                         onClick={() => handleRepeatOrder(order.id)}

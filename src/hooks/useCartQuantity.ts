@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useCart } from './useCart';
+import { CartItem } from '@/types/cartItem';
 
 export const useCartQuantity = (productId: number, isEntrance: boolean, maxQuantity: number) => {
   const { addToCart, removeFromCart } = useCart(productId, isEntrance);
@@ -16,8 +17,8 @@ export const useCartQuantity = (productId: number, isEntrance: boolean, maxQuant
         // Для авторизованных пользователей проверяем через API
         const response = await fetch('/api/cart');
         if (response.ok) {
-          const cartItems = await response.json();
-          const existingItem = cartItems.find((item: any) => item.product_id === productId);
+          const cartItems: CartItem[] = await response.json();
+          const existingItem = cartItems.find(item => item.product_id === productId);
           if (existingItem) {
             setCartItemQuantity(existingItem.quantity);
             setQuantity(existingItem.quantity);
@@ -29,8 +30,8 @@ export const useCartQuantity = (productId: number, isEntrance: boolean, maxQuant
         // Для неавторизованных проверяем localStorage
         const cartFromStorage = localStorage.getItem('cart');
         if (cartFromStorage) {
-          const cart = JSON.parse(cartFromStorage);
-          const existingItem = cart.find((item: any) => item.productId === productId);
+          const cart: CartItem[] = JSON.parse(cartFromStorage);
+          const existingItem = cart.find(item => item.product_id === productId);
           if (existingItem) {
             setCartItemQuantity(existingItem.quantity);
             setQuantity(existingItem.quantity);
@@ -98,9 +99,9 @@ export const useCartQuantity = (productId: number, isEntrance: boolean, maxQuant
           // Обновляем в localStorage
           const cartFromStorage = localStorage.getItem('cart');
           if (cartFromStorage) {
-            let cart = JSON.parse(cartFromStorage);
-            cart = cart.map((item: any) =>
-              item.productId === productId ? { ...item, quantity: newQuantity } : item
+            let cart: CartItem[] = JSON.parse(cartFromStorage);
+            cart = cart.map(item =>
+              item.product_id === productId ? { ...item, quantity: newQuantity } : item
             );
             localStorage.setItem('cart', JSON.stringify(cart));
             setCartItemQuantity(newQuantity);

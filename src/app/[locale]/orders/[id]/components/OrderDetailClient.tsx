@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Order } from '@/types/order';
 
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -23,7 +24,7 @@ const statusLabels: Record<string, string> = {
 };
 
 interface OrderDetailClientProps {
-  order: any;
+  order: Order;
 }
 
 export default function OrderDetailClient({ order }: OrderDetailClientProps) {
@@ -50,26 +51,28 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
       {
         status: 'confirmed',
         label: 'Заказ подтвержден',
-        date: order.status !== 'pending' ? order.updated_at : null,
-        completed: ['confirmed', 'assembling', 'ready', 'completed'].includes(order.status),
+        date: order.order_statuses.name !== 'pending' ? order.updated_at : null,
+        completed: ['confirmed', 'assembling', 'ready', 'completed'].includes(
+          order.order_statuses.name
+        ),
       },
       {
         status: 'assembling',
         label: 'Заказ собирается',
         date: order.assembled_at,
-        completed: ['assembling', 'ready', 'completed'].includes(order.status),
+        completed: ['assembling', 'ready', 'completed'].includes(order.order_statuses.name),
       },
       {
         status: 'ready',
         label: 'Заказ готов',
         date: order.ready_at,
-        completed: ['ready', 'completed'].includes(order.status),
+        completed: ['ready', 'completed'].includes(order.order_statuses.name),
       },
       {
         status: 'completed',
         label: 'Заказ получен',
         date: order.completed_at,
-        completed: order.status === 'completed',
+        completed: order.order_statuses.name === 'completed',
       },
     ];
 
@@ -111,19 +114,20 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
           >
             Назад к заказам
           </button>
-          {order.status !== 'cancelled' && order.status !== 'completed' && (
-            <button
-              onClick={() => {
-                if (confirm('Вы уверены, что хотите отменить заказ?')) {
-                  // Здесь будет вызов API для отмены заказа
-                  alert('Функция отмены заказа в разработке');
-                }
-              }}
-              className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200"
-            >
-              Отменить заказ
-            </button>
-          )}
+          {order.order_statuses.name !== 'cancelled' &&
+            order.order_statuses.name !== 'completed' && (
+              <button
+                onClick={() => {
+                  if (confirm('Вы уверены, что хотите отменить заказ?')) {
+                    // Здесь будет вызов API для отмены заказа
+                    alert('Функция отмены заказа в разработке');
+                  }
+                }}
+                className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200"
+              >
+                Отменить заказ
+              </button>
+            )}
           <button
             onClick={handleRepeatOrder}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
@@ -139,14 +143,14 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold">Статус заказа</h2>
               <span
-                className={`px-4 py-2 text-sm font-semibold rounded-full ${statusColors[order.status]}`}
+                className={`px-4 py-2 text-sm font-semibold rounded-full ${statusColors[order.order_statuses.name]}`}
               >
-                {statusLabels[order.status]}
+                {statusLabels[order.order_statuses.name]}
               </span>
             </div>
 
             <div className="space-y-4">
-              {getStatusTimeline().map((step, index) => (
+              {getStatusTimeline().map(step => (
                 <div key={step.status} className="flex items-center">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed ? 'bg-green-500' : 'bg-gray-300'}`}
@@ -173,7 +177,7 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
               ))}
             </div>
 
-            {order.status === 'ready' && (
+            {order.order_statuses.name === 'ready' && (
               <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div className="flex items-center">
                   <svg

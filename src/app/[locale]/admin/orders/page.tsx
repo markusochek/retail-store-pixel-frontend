@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 import AdminOrdersClient from './components/AdminOrdersClient';
 
@@ -18,6 +18,7 @@ export default async function AdminOrdersPage() {
     include: {
       users: {
         select: {
+          id: true,
           email: true,
         },
       },
@@ -30,9 +31,10 @@ export default async function AdminOrdersPage() {
           },
         },
       },
+      order_statuses: true,
     },
     orderBy: { created_at: 'desc' },
   });
 
-  return <AdminOrdersClient initialOrders={orders} />;
+  return <AdminOrdersClient initialOrders={JSON.parse(JSON.stringify(orders))} />;
 }

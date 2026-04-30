@@ -6,6 +6,9 @@ import path from 'path';
 import https from 'https';
 import { PrismaClient } from '@prisma/client';
 
+type WallGetResponse = Awaited<ReturnType<VK['api']['wall']['get']>>;
+type WallWallItem = WallGetResponse['items'][number];
+
 const prisma = new PrismaClient();
 const vk = new VK({ token: process.env.VK_TOKEN! });
 
@@ -52,15 +55,18 @@ function mapCategory(tag: string): number {
 function fixUnicode(str: string): string {
   if (!str) return '';
 
-  return str
-    .replace(/[\uD800-\uDFFF]/g, '')
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
-    .trim();
+  return (
+    str
+      .replace(/[\uD800-\uDFFF]/g, '')
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+      .trim()
+  );
 }
 
 function cleanText(text: string): string {
   return text
-    .replace(/[⚡🔥❗✨💖😍🎄😈🦄💞🎉🎊👇]+/g, '')
+    .replace(/[⚡🔥❗✨💖😍🎄😈🦄💞🎉🎊👇]+/gu, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -152,14 +158,18 @@ async function downloadImage(url: string, retries = 3): Promise<string | null> {
     });
 
     return filename;
-  } catch (err: any) {
+  } catch (err: unknown) {
     if (retries > 0) {
       console.log('retry...', url);
       await new Promise(r => setTimeout(r, 1000));
       return downloadImage(url, retries - 1);
     }
 
-    console.error('❌ Ошибка скачивания:', url, err.message);
+    console.error(
+      '❌ Ошибка скачивания:',
+      url,
+      err instanceof Error ? err.message : 'Неизвестная ошибка'
+    );
     return null;
   }
 }
@@ -200,7 +210,7 @@ async function syncVKGroupPosts(): Promise<void> {
   console.log('🚀 ВСЕ посты синхронизированы');
 }
 
-async function processPost(item: any): Promise<void> {
+async function processPost(item: WallWallItem): Promise<void> {
   const { title, description, tags } = parseVKPost(item.text);
 
   const mainTag = tags.find(t => ['toys', 'officesupplies'].includes(t)) || 'toys';
@@ -238,7 +248,15 @@ async function processPost(item: any): Promise<void> {
   for (const attach of item.attachments) {
     if (attach.type !== 'photo') continue;
 
-    const largest = attach.photo.sizes.reduce((a: any, b: any) => (a.width > b.width ? a : b));
+    const largest = attach.photo.sizes.reduce(
+      (
+        a: { width: number; url: string },
+        b: {
+          width: number;
+          url: string;
+        }
+      ) => (a.width > b.width ? a : b)
+    );
 
     const localPath = await downloadImage(largest.url);
     if (!localPath) continue;

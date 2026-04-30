@@ -1,9 +1,11 @@
 // app/api/products/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 import { productsIndexAdmin } from '@/lib/meilisearch';
+import { Product, ProductWithIsFavorite } from '@/types/product';
+import { Favorite } from '@/types/favorite';
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,14 +20,15 @@ export async function GET(request: NextRequest) {
     let userFavoriteIds: number[] = [];
 
     if (session?.user?.id) {
-      const favorites = await prisma.favorites.findMany({
+      const rawFavorites = await prisma.favorites.findMany({
         where: { user_id: Number(session.user.id) },
         select: { product_id: true },
       });
+      const favorites: Favorite[] = JSON.parse(JSON.stringify(rawFavorites));
       userFavoriteIds = favorites.map(f => f.product_id);
     }
 
-    let products: any[];
+    let products: ProductWithIsFavorite[];
     let hasMore = false;
     let nextCursor: string | null = null;
 
@@ -36,10 +39,11 @@ export async function GET(request: NextRequest) {
       }
 
       // Получаем ID избранных товаров
-      const favs = await prisma.favorites.findMany({
+      const rawFavs = await prisma.favorites.findMany({
         where: { user_id: Number(session.user.id) },
         select: { product_id: true },
       });
+      const favs: Favorite[] = JSON.parse(JSON.stringify(rawFavs));
       const favoriteIds = favs.map(f => f.product_id);
 
       if (favoriteIds.length === 0) {
@@ -47,8 +51,8 @@ export async function GET(request: NextRequest) {
       }
 
       // Пагинация по id избранных товаров
-      const where: any = {
-        id: { in: favoriteIds },
+      const where = {
+        id: { in: favoriteIds, gt: 0 },
       };
       if (cursor) {
         where.id = { ...where.id, gt: parseInt(cursor) };
@@ -62,13 +66,13 @@ export async function GET(request: NextRequest) {
       });
 
       hasMore = items.length > limit;
-      const data = hasMore ? items.slice(0, limit) : items;
+      const data: Product[] = hasMore ? items.slice(0, limit) : items;
       nextCursor = hasMore ? data[data.length - 1].id.toString() : null;
 
       products = data.map(product => ({
         ...product,
         sale_price: parseFloat(product.sale_price.toString()),
-        isFavorite: true, // все элементы избранные
+        isFavorite: true,
       }));
     } else {
       if (q) {
@@ -81,11 +85,22 @@ export async function GET(request: NextRequest) {
         });
         const hits = searchResults.hits;
         hasMore = hits.length > limit;
-        products = hasMore ? hits.slice(0, limit) : hits;
+        const slicedHits = hits.slice(0, limit);
+
+        const mappedProducts: ProductWithIsFavorite[] = slicedHits.map(p => ({
+          id: p.id,
+          name: p.name,
+          sale_price: p.sale_price,
+          quantity: p.quantity,
+          images: p.images || [],
+          isFavorite: userFavoriteIds.includes(p.id),
+        }));
+
+        products = mappedProducts.sort((a, b) => a.id - b.id);
 
         // Преобразуем к нужному формату и сортируем по id
         products = products
-          .map((p: any) => ({
+          .map((p: Product) => ({
             id: p.id,
             name: p.name,
             sale_price: p.sale_price,
@@ -93,13 +108,13 @@ export async function GET(request: NextRequest) {
             images: p.images || [],
             isFavorite: userFavoriteIds.includes(p.id),
           }))
-          .sort((a: any, b: any) => a.id - b.id);
+          .sort((a: { id: number }, b: { id: number }) => a.id - b.id);
 
         // Для поиска nextCursor не используем (пагинация по page)
         nextCursor = null;
       } else {
         // Обычный режим – курсорная пагинация через Prisma
-        const where: any = {};
+        const where = {};
         const cursorObj = cursor ? { id: parseInt(cursor) } : undefined;
 
         const items = await prisma.products.findMany({
@@ -111,7 +126,7 @@ export async function GET(request: NextRequest) {
         });
 
         hasMore = items.length > limit;
-        const data = hasMore ? items.slice(0, limit) : items;
+        const data: Product[] = hasMore ? items.slice(0, limit) : items;
         nextCursor = hasMore ? data[data.length - 1].id.toString() : null;
 
         products = data.map(product => ({

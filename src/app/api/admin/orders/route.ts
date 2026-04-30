@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 
 // GET - все заказы (для админа)
@@ -72,9 +72,18 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Order ID and status are required' }, { status: 400 });
     }
 
-    const updateData: any = {
+    const updateData: {
+      status: string;
+      updated_at: Date;
+      assembled_at: Date | null;
+      ready_at: Date | null;
+      completed_at: Date | null;
+    } = {
       status,
       updated_at: new Date(),
+      assembled_at: null,
+      ready_at: null,
+      completed_at: null,
     };
 
     // Устанавливаем временные метки в зависимости от статуса

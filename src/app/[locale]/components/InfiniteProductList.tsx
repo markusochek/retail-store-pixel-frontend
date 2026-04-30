@@ -3,15 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductBlock from '@/app/[locale]/components/components-product-container/components-product-container-client/ProductBlock';
-
-interface Product {
-  id: number;
-  name: string;
-  sale_price: number;
-  quantity: number;
-  images: { id: number; path_to_image: string; product_id: number }[];
-  isFavorite: boolean;
-}
+import { ProductWithIsFavorite } from '@/types/product';
 
 interface InfiniteProductListProps {
   isEntrance: boolean;
@@ -26,7 +18,7 @@ export default function InfiniteProductList({
   isAdmin,
   showFavoritesOnly = false,
 }: InfiniteProductListProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductWithIsFavorite[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -71,7 +63,7 @@ export default function InfiniteProductList({
       if (!res.ok) throw new Error(data.error || 'Ошибка загрузки');
 
       // Для неавторизованных обрабатываем избранное из localStorage
-      let newProducts: Product[] = data.products;
+      let newProducts: ProductWithIsFavorite[] = data.products;
       if (!isEntrance) {
         const storedFavorites = localStorage.getItem('favorites');
         if (storedFavorites) {

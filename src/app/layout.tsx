@@ -4,7 +4,7 @@ import React from 'react';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import NextAuthProvider from '@/app/components/NextAuthProvider';
 
 export const metadata: Metadata = {

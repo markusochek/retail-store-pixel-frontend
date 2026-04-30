@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 import { randomInt } from 'crypto';
+import { CartItem } from '@/types/cartItem';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,12 +24,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Получаем товары из корзины
-    const cartItems = await prisma.cart_items.findMany({
+    const rawCartItems = await prisma.cart_items.findMany({
       where: { user_id: user.id },
       include: {
         products: true,
       },
     });
+    const cartItems: CartItem[] = JSON.parse(JSON.stringify(rawCartItems));
 
     if (cartItems.length === 0) {
       return NextResponse.json({ error: 'Корзина пуста' }, { status: 400 });
@@ -46,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Рассчитываем общую сумму
     const totalAmount = cartItems.reduce((sum, item) => {
-      return sum + item.products.sale_price.toNumber() * item.quantity;
+      return sum + item.products.sale_price * item.quantity;
     }, 0);
 
     // Генерируем номер заказа

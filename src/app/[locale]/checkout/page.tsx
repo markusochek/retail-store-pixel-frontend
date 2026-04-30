@@ -33,8 +33,8 @@ export default function CheckoutPage() {
 
       const order = await response.json();
       router.push(`/orders/${order.id}`);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Неизвестная ошибка');
     } finally {
       setIsLoading(false);
     }

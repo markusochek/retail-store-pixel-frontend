@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/db/prisma';
 import { notFound, redirect } from 'next/navigation';
 import OrderDetailClient from './components/OrderDetailClient';
@@ -27,7 +27,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
   const order = await prisma.orders.findUnique({
     where: {
       id: parseInt(id),
-      user_id: user.id, // Гарантируем, что пользователь видит только свои заказы
+      user_id: user.id,
     },
     include: {
       order_items: {
@@ -39,6 +39,8 @@ export default async function OrderDetailPage({ params }: PageProps) {
           },
         },
       },
+      order_statuses: true,
+      users: true,
     },
   });
 
@@ -48,7 +50,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <OrderDetailClient order={order} />
+      <OrderDetailClient order={JSON.parse(JSON.stringify(order))} />
     </div>
   );
 }

@@ -15,7 +15,13 @@ export const parseProductsFile = (filename: fs.PathOrFileDescriptor) => {
     }
 
     const headers = lines[0].split(/\t|\s{2,}/).filter((part: string) => part !== '');
-    const products = [];
+    const products: {
+      id: number;
+      name: string;
+      unit_of_measurement: string;
+      sale_price: number;
+      quantity: number;
+    }[] = [];
 
     for (let i = 1; i < lines.length; i++) {
       const parts = lines[i].split(/\t|\s{2,}/).filter((part: string) => part !== '');

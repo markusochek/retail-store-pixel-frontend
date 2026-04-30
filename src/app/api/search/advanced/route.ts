@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Строим фильтры
-    const filters = [];
+    const filters: string[] = [];
     if (category) filters.push(`category_name = "${category}"`);
     if (maxPrice) filters.push(`sale_price <= ${maxPrice}`);
     if (inStock === 'true') filters.push('quantity > 0');

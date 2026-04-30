@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { useBasketStore } from '@/stores/useBasketStore';
+import { CartItem } from '@/types/cartItem';
 
 export const useCart = (productId: number, isEntrance: boolean) => {
   const { increment, decrement, count } = useBasketStore();
@@ -66,9 +67,9 @@ export const useCart = (productId: number, isEntrance: boolean) => {
       } else {
         const cartFromStorage = localStorage.getItem('cart');
         if (cartFromStorage) {
-          let cart = JSON.parse(cartFromStorage);
-          const itemToRemove = cart.find((item: any) => item.productId === productId);
-          cart = cart.filter((item: any) => item.productId !== productId);
+          let cart: CartItem[] = JSON.parse(cartFromStorage);
+          const itemToRemove = cart.find(item => item.product_id === productId);
+          cart = cart.filter(item => item.product_id !== productId);
           localStorage.setItem('cart', JSON.stringify(cart));
 
           // Обновляем счетчик
@@ -102,10 +103,8 @@ export const useCart = (productId: number, isEntrance: boolean) => {
         } else {
           const cartFromStorage = localStorage.getItem('cart');
           if (cartFromStorage) {
-            let cart = JSON.parse(cartFromStorage);
-            cart = cart.map((item: any) =>
-              item.productId === productId ? { ...item, quantity } : item
-            );
+            let cart: CartItem[] = JSON.parse(cartFromStorage);
+            cart = cart.map(item => (item.product_id === productId ? { ...item, quantity } : item));
             localStorage.setItem('cart', JSON.stringify(cart));
 
             // Пересчитываем общее количество

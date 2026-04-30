@@ -5,7 +5,7 @@ import loggerServer from '@/lib/logger/logger-server';
 import React from 'react';
 import AddToCartButton from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/AddToCartButton';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 
 interface PageProps {
   params: Promise<{ id: string }>;

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Order } from '@/types/order';
 
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -30,11 +31,11 @@ const statusOptions = [
 ];
 
 interface AdminOrdersClientProps {
-  initialOrders: any[];
+  initialOrders: Order[];
 }
 
 export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
-  const [orders, setOrders] = useState<any[]>(initialOrders);
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [isLoading, setIsLoading] = useState<Record<number, boolean>>({});
   const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
 
@@ -138,19 +139,19 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
                       <div className="text-sm text-gray-500">{getTimeAgo(order.created_at)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      {order.total_amount} ₽
+                      {order.total_amount.toString()} ₽
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.status]}`}
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.order_statuses.name]}`}
                       >
-                        {statusLabels[order.status]}
+                        {statusLabels[order.order_statuses.name]}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         <select
-                          value={order.status}
+                          value={order.order_statuses.name}
                           onChange={e => updateOrderStatus(order.id, e.target.value)}
                           disabled={isLoading[order.id]}
                           className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"

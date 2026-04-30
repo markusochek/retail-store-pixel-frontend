@@ -6,7 +6,7 @@ import Basket from '@/app/components/components-header/Basket';
 import Logo from '@/app/components/components-header/Logo';
 import { prisma } from '@/lib/db/prisma';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import Orders from '@/app/components/components-header/Orders';
 
 const Header = async () => {

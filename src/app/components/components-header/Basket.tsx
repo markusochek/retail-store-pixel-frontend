@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBasketStore } from '@/stores/useBasketStore';
 import { ShoppingBasket } from 'lucide-react';
+import { CartItem } from '@/types/cartItem';
 
 interface BasketProps {
   serverCount: number;
@@ -20,8 +21,8 @@ const Basket = ({ serverCount }: BasketProps) => {
       // Проверяем localStorage для неавторизованных пользователей
       const cartFromStorage = localStorage.getItem('cart');
       if (cartFromStorage) {
-        const cart = JSON.parse(cartFromStorage);
-        const totalItems = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        const cart: CartItem[] = JSON.parse(cartFromStorage);
+        const totalItems = cart.reduce((sum: number, item) => sum + item.quantity, 0);
         setCount(totalItems);
       } else {
         setCount(0);

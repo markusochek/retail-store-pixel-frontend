@@ -4,13 +4,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import AddToCartButton from '@/app/[locale]/components/components-product-container/components-product-container-client/compoments-product-block/AddToCartButton';
+import { CartItem } from '@/types/cartItem';
 
 export default function BasketPageClient({
   initialCartItems,
-  initialTotalAmount,
   isEntrance,
 }: {
-  initialCartItems: any[];
+  initialCartItems: CartItem[];
   initialTotalAmount: number;
   isEntrance: boolean;
 }) {
@@ -21,7 +21,7 @@ export default function BasketPageClient({
 
   // Пересчитываем сумму при изменении cartItems
   const totalAmount = cartItems.reduce((sum, item) => {
-    return sum + parseFloat(item.products.sale_price.toString()) * item.quantity;
+    return sum + item.products.sale_price * item.quantity;
   }, 0);
 
   // Функция для обновления количества товара
@@ -45,8 +45,8 @@ export default function BasketPageClient({
             // Для неавторизованных - localStorage
             const cartFromStorage = localStorage.getItem('cart');
             if (cartFromStorage) {
-              let cart = JSON.parse(cartFromStorage);
-              cart = cart.filter((item: any) => item.productId !== productId);
+              let cart: CartItem[] = JSON.parse(cartFromStorage);
+              cart = cart.filter(item => item.product_id !== productId);
               localStorage.setItem('cart', JSON.stringify(cart));
               setCartItems(prev => prev.filter(item => item.product_id !== productId));
             }
@@ -71,9 +71,9 @@ export default function BasketPageClient({
             // Для неавторизованных - localStorage
             const cartFromStorage = localStorage.getItem('cart');
             if (cartFromStorage) {
-              let cart = JSON.parse(cartFromStorage);
-              cart = cart.map((item: any) =>
-                item.productId === productId ? { ...item, quantity: newQuantity } : item
+              let cart: CartItem[] = JSON.parse(cartFromStorage);
+              cart = cart.map(item =>
+                item.product_id === productId ? { ...item, quantity: newQuantity } : item
               );
               localStorage.setItem('cart', JSON.stringify(cart));
               setCartItems(prev =>
@@ -99,8 +99,7 @@ export default function BasketPageClient({
     if (!isEntrance) {
       const cartFromStorage = localStorage.getItem('cart');
       if (cartFromStorage) {
-        const cart = JSON.parse(cartFromStorage);
-        // Можно обновить cartItems из localStorage при загрузке
+        JSON.parse(cartFromStorage);
       }
     }
   }, [isEntrance]);
